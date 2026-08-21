@@ -55,9 +55,14 @@ function AdminDashboard() {
 
   const setStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: "PUBLISHED" | "REJECTED" }) => {
-      const payload: Record<string, unknown> = { status };
-      if (status === "PUBLISHED") payload.published_at = new Date().toISOString();
-      const { error } = await supabase.from("news").update(payload).eq("id", id);
+      const { error } = await supabase
+        .from("news")
+        .update(
+          status === "PUBLISHED"
+            ? { status, published_at: new Date().toISOString() }
+            : { status },
+        )
+        .eq("id", id);
       if (error) throw error;
       await logActivity(status === "PUBLISHED" ? "PUBLISH" : "REJECT", "NEWS", id);
     },
