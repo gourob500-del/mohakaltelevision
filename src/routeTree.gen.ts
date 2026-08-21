@@ -18,6 +18,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
 import { Route as RepresentativeLoginRouteImport } from './routes/representative.login'
 import { Route as RepresentativeRegisterRouteImport } from './routes/representative.register'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
@@ -67,6 +68,11 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RepresentativeIndexRoute = RepresentativeIndexRouteImport.update({
+  id: '/representative/',
+  path: '/representative/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RepresentativeLoginRoute = RepresentativeLoginRouteImport.update({
   id: '/representative/login',
   path: '/representative/login',
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
+  '/representative/': typeof RepresentativeIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
+  '/representative': typeof RepresentativeIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
+  '/representative/': typeof RepresentativeIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
+    | '/representative/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
+    | '/representative'
     | '/api/public/media/$'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
+    | '/representative/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,7 @@ export interface RootRouteChildren {
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
   RepresentativeRegisterRoute: typeof RepresentativeRegisterRoute
+  RepresentativeIndexRoute: typeof RepresentativeIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/representative/': {
+      id: '/representative/'
+      path: '/representative'
+      fullPath: '/representative/'
+      preLoaderRoute: typeof RepresentativeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/representative/login': {
       id: '/representative/login'
       path: '/representative/login'
@@ -287,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
   RepresentativeRegisterRoute: RepresentativeRegisterRoute,
+  RepresentativeIndexRoute: RepresentativeIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
