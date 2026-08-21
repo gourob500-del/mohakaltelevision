@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DistrictRouteImport } from './routes/district'
+import { Route as LatestRouteImport } from './routes/latest'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as CategorySlugRouteImport } from './routes/category.$slug'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as RepresentativeLoginRouteImport } from './routes/representative.login'
+import { Route as RepresentativeRegisterRouteImport } from './routes/representative.register'
+import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DistrictRoute = DistrictRouteImport.update({
+  id: '/district',
+  path: '/district',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LatestRoute = LatestRouteImport.update({
+  id: '/latest',
+  path: '/latest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategorySlugRoute = CategorySlugRouteImport.update({
+  id: '/category/$slug',
+  path: '/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/news/$slug',
+  path: '/news/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepresentativeLoginRoute = RepresentativeLoginRouteImport.update({
+  id: '/representative/login',
+  path: '/representative/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepresentativeRegisterRoute = RepresentativeRegisterRouteImport.update({
+  id: '/representative/register',
+  path: '/representative/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
+  id: '/api/public/media/$',
+  path: '/api/public/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/district': typeof DistrictRoute
+  '/latest': typeof LatestRoute
+  '/search': typeof SearchRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/representative/login': typeof RepresentativeLoginRoute
+  '/representative/register': typeof RepresentativeRegisterRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/district': typeof DistrictRoute
+  '/latest': typeof LatestRoute
+  '/search': typeof SearchRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/representative/login': typeof RepresentativeLoginRoute
+  '/representative/register': typeof RepresentativeRegisterRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/district': typeof DistrictRoute
+  '/latest': typeof LatestRoute
+  '/search': typeof SearchRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/representative/login': typeof RepresentativeLoginRoute
+  '/representative/register': typeof RepresentativeRegisterRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/district'
+    | '/latest'
+    | '/search'
+    | '/category/$slug'
+    | '/news/$slug'
+    | '/representative/login'
+    | '/representative/register'
+    | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/district'
+    | '/latest'
+    | '/search'
+    | '/category/$slug'
+    | '/news/$slug'
+    | '/representative/login'
+    | '/representative/register'
+    | '/api/public/media/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/district'
+    | '/latest'
+    | '/search'
+    | '/category/$slug'
+    | '/news/$slug'
+    | '/representative/login'
+    | '/representative/register'
+    | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  DistrictRoute: typeof DistrictRoute
+  LatestRoute: typeof LatestRoute
+  SearchRoute: typeof SearchRoute
+  CategorySlugRoute: typeof CategorySlugRoute
+  NewsSlugRoute: typeof NewsSlugRoute
+  RepresentativeLoginRoute: typeof RepresentativeLoginRoute
+  RepresentativeRegisterRoute: typeof RepresentativeRegisterRoute
+  ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +182,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/district': {
+      id: '/district'
+      path: '/district'
+      fullPath: '/district'
+      preLoaderRoute: typeof DistrictRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/latest': {
+      id: '/latest'
+      path: '/latest'
+      fullPath: '/latest'
+      preLoaderRoute: typeof LatestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/category/$slug': {
+      id: '/category/$slug'
+      path: '/category/$slug'
+      fullPath: '/category/$slug'
+      preLoaderRoute: typeof CategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/news/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/representative/login': {
+      id: '/representative/login'
+      path: '/representative/login'
+      fullPath: '/representative/login'
+      preLoaderRoute: typeof RepresentativeLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/representative/register': {
+      id: '/representative/register'
+      path: '/representative/register'
+      fullPath: '/representative/register'
+      preLoaderRoute: typeof RepresentativeRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/media/$': {
+      id: '/api/public/media/$'
+      path: '/api/public/media/$'
+      fullPath: '/api/public/media/$'
+      preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  DistrictRoute: DistrictRoute,
+  LatestRoute: LatestRoute,
+  SearchRoute: SearchRoute,
+  CategorySlugRoute: CategorySlugRoute,
+  NewsSlugRoute: NewsSlugRoute,
+  RepresentativeLoginRoute: RepresentativeLoginRoute,
+  RepresentativeRegisterRoute: RepresentativeRegisterRoute,
+  ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
