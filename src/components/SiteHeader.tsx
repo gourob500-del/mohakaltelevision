@@ -19,7 +19,7 @@ export function SiteHeader() {
     if (!term.trim()) return;
     setSearchOpen(false);
     setOpen(false);
-    void navigate({ to: "/search", search: { q: term.trim(), page: 1 } });
+    void navigate({ to: "/search", search: { q: term.trim() } });
   };
 
   return (
