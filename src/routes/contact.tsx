@@ -23,8 +23,8 @@ function ContactPage() {
   const { data } = useQuery({ queryKey: ["settings"], queryFn: () => fetchSettings() });
 
   const items = [
-    { icon: MapPin, label: "ঠিকানা", value: data?.address || "ঢাকা, বাংলাদেশ" },
-    { icon: Phone, label: "ফোন", value: data?.contact_phone || "—" },
+    { icon: MapPin, label: "ঠিকানা", value: "ঢাকা, বাংলাদেশ" },
+    { icon: Phone, label: "ফোন", value: data?.contact_number || "—" },
     { icon: Mail, label: "ই-মেইল", value: data?.contact_email || "—" },
   ];
 
