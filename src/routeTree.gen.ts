@@ -17,12 +17,12 @@ import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
 import { Route as RepresentativeLoginRouteImport } from './routes/representative.login'
 import { Route as RepresentativeRegisterRouteImport } from './routes/representative.register'
+import { Route as AdminNewsIndexRouteImport } from './routes/admin.news.index'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,11 +65,6 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminNewsRoute = AdminNewsRouteImport.update({
-  id: '/admin/news',
-  path: '/admin/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -95,6 +90,11 @@ const RepresentativeRegisterRoute = RepresentativeRegisterRouteImport.update({
   path: '/representative/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNewsIndexRoute = AdminNewsIndexRouteImport.update({
+  id: '/admin/news/',
+  path: '/admin/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
@@ -109,13 +109,13 @@ export interface FileRoutesByFullPath {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
   '/admin/': typeof AdminIndexRoute
   '/representative/': typeof RepresentativeIndexRoute
+  '/admin/news/': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
@@ -126,13 +126,13 @@ export interface FileRoutesByTo {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
   '/admin': typeof AdminIndexRoute
   '/representative': typeof RepresentativeIndexRoute
+  '/admin/news': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
@@ -144,13 +144,13 @@ export interface FileRoutesById {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
   '/representative/register': typeof RepresentativeRegisterRoute
   '/admin/': typeof AdminIndexRoute
   '/representative/': typeof RepresentativeIndexRoute
+  '/admin/news/': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
@@ -163,13 +163,13 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
-    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
     | '/admin/'
     | '/representative/'
+    | '/admin/news/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -180,13 +180,13 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
-    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
     | '/admin'
     | '/representative'
+    | '/admin/news'
     | '/api/public/media/$'
   id:
     | '__root__'
@@ -197,13 +197,13 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
-    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
     | '/representative/register'
     | '/admin/'
     | '/representative/'
+    | '/admin/news/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
@@ -215,13 +215,13 @@ export interface RootRouteChildren {
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
   AdminLoginRoute: typeof AdminLoginRoute
-  AdminNewsRoute: typeof AdminNewsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
   RepresentativeRegisterRoute: typeof RepresentativeRegisterRoute
   AdminIndexRoute: typeof AdminIndexRoute
   RepresentativeIndexRoute: typeof RepresentativeIndexRoute
+  AdminNewsIndexRoute: typeof AdminNewsIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -283,13 +283,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/news': {
-      id: '/admin/news'
-      path: '/admin/news'
-      fullPath: '/admin/news'
-      preLoaderRoute: typeof AdminNewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -325,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RepresentativeRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/news/': {
+      id: '/admin/news/'
+      path: '/admin/news'
+      fullPath: '/admin/news/'
+      preLoaderRoute: typeof AdminNewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/media/$': {
       id: '/api/public/media/$'
       path: '/api/public/media/$'
@@ -343,13 +343,13 @@ const rootRouteChildren: RootRouteChildren = {
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
   AdminLoginRoute: AdminLoginRoute,
-  AdminNewsRoute: AdminNewsRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
   RepresentativeRegisterRoute: RepresentativeRegisterRoute,
   AdminIndexRoute: AdminIndexRoute,
   RepresentativeIndexRoute: RepresentativeIndexRoute,
+  AdminNewsIndexRoute: AdminNewsIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
