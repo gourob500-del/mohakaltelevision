@@ -20,7 +20,7 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: "CORRECTION_REQUIRED", label: "সংশোধন প্রয়োজন" },
 ];
 
-export const Route = createFileRoute("/admin/news")({
+export const Route = createFileRoute("/admin/news/")({
   validateSearch: (search: Record<string, unknown>) => ({
     status: (typeof search['status'] === "string" ? (search['status'] as Filter) : "ALL") as Filter,
   }),

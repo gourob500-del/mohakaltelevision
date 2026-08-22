@@ -17,6 +17,7 @@ import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
@@ -64,6 +65,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNewsRoute = AdminNewsRouteImport.update({
+  id: '/admin/news',
+  path: '/admin/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news': typeof AdminNewsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/news'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminNewsRoute: typeof AdminNewsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
@@ -270,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/news': {
+      id: '/admin/news'
+      path: '/admin/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof AdminNewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminNewsRoute: AdminNewsRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
