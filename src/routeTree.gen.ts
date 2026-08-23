@@ -17,6 +17,7 @@ import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
@@ -64,6 +65,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
+  id: '/admin/representatives',
+  path: '/admin/representatives',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/representatives'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/representatives'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/login'
+    | '/admin/representatives'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminRepresentativesRoute: typeof AdminRepresentativesRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/representatives': {
+      id: '/admin/representatives'
+      path: '/admin/representatives'
+      fullPath: '/admin/representatives'
+      preLoaderRoute: typeof AdminRepresentativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminRepresentativesRoute: AdminRepresentativesRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
