@@ -16,6 +16,7 @@ import { Route as DistrictRouteImport } from './routes/district'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
@@ -60,6 +61,11 @@ const SearchRoute = SearchRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/admin/categories',
+  path: '/admin/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -238,6 +250,7 @@ export interface RootRouteChildren {
   DistrictRoute: typeof DistrictRoute
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminRepresentativesRoute: typeof AdminRepresentativesRoute
   CategorySlugRoute: typeof CategorySlugRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/admin/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -382,6 +402,7 @@ const rootRouteChildren: RootRouteChildren = {
   DistrictRoute: DistrictRoute,
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminRepresentativesRoute: AdminRepresentativesRoute,
   CategorySlugRoute: CategorySlugRoute,
