@@ -16,7 +16,12 @@ import { Route as DistrictRouteImport } from './routes/district'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
@@ -61,9 +66,34 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/admin/categories',
+  path: '/admin/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/admin/locations',
+  path: '/admin/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminMediaRoute = AdminMediaRouteImport.update({
+  id: '/admin/media',
+  path: '/admin/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
+  id: '/admin/representatives',
+  path: '/admin/representatives',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -114,7 +144,12 @@ export interface FileRoutesByFullPath {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -132,7 +167,12 @@ export interface FileRoutesByTo {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -151,7 +191,12 @@ export interface FileRoutesById {
   '/district': typeof DistrictRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -171,7 +216,12 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -189,7 +239,12 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -207,7 +262,12 @@ export interface FileRouteTypes {
     | '/district'
     | '/latest'
     | '/search'
+    | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
+    | '/admin/media'
+    | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -226,7 +286,12 @@ export interface RootRouteChildren {
   DistrictRoute: typeof DistrictRoute
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminLocationsRoute: typeof AdminLocationsRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminMediaRoute: typeof AdminMediaRoute
+  AdminRepresentativesRoute: typeof AdminRepresentativesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
@@ -289,11 +354,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/admin/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/admin/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/media': {
+      id: '/admin/media'
+      path: '/admin/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/representatives': {
+      id: '/admin/representatives'
+      path: '/admin/representatives'
+      fullPath: '/admin/representatives'
+      preLoaderRoute: typeof AdminRepresentativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -362,7 +462,12 @@ const rootRouteChildren: RootRouteChildren = {
   DistrictRoute: DistrictRoute,
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminLocationsRoute: AdminLocationsRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminMediaRoute: AdminMediaRoute,
+  AdminRepresentativesRoute: AdminRepresentativesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
