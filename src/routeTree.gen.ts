@@ -21,6 +21,7 @@ import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
@@ -90,6 +91,11 @@ const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
   path: '/admin/representatives',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -188,6 +196,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -212,6 +221,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/media'
     | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/media'
     | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/media'
     | '/admin/representatives'
+    | '/admin/settings'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -279,6 +291,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMediaRoute: typeof AdminMediaRoute
   AdminRepresentativesRoute: typeof AdminRepresentativesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
@@ -376,6 +389,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRepresentativesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminMediaRoute: AdminMediaRoute,
   AdminRepresentativesRoute: AdminRepresentativesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,
