@@ -17,6 +17,7 @@ import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
@@ -66,6 +67,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/admin/categories',
   path: '/admin/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLocationsRoute = AdminLocationsRouteImport.update({
+  id: '/admin/locations',
+  path: '/admin/locations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/category/$slug': typeof CategorySlugRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/latest'
     | '/search'
     | '/admin/categories'
+    | '/admin/locations'
     | '/admin/login'
     | '/admin/representatives'
     | '/category/$slug'
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminLocationsRoute: typeof AdminLocationsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminRepresentativesRoute: typeof AdminRepresentativesRoute
   CategorySlugRoute: typeof CategorySlugRoute
@@ -320,6 +333,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/locations': {
+      id: '/admin/locations'
+      path: '/admin/locations'
+      fullPath: '/admin/locations'
+      preLoaderRoute: typeof AdminLocationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -403,6 +423,7 @@ const rootRouteChildren: RootRouteChildren = {
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminLocationsRoute: AdminLocationsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminRepresentativesRoute: AdminRepresentativesRoute,
   CategorySlugRoute: CategorySlugRoute,
