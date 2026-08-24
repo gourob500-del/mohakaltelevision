@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, Search, Shield, UserRound, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { NAV_LINKS } from "@/lib/mtv";
+import { CategoryNav } from "@/components/CategoryNav";
 import { fetchSettings } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
