@@ -28,7 +28,7 @@ export function CategoryNav() {
       {(categories ?? []).map((c) => (
         <Link
           key={c.id}
-          to="/category/$slug"
+          to={c.slug === "district" ? "/district" : "/category/$slug"}
           params={{ slug: c.slug }}
           activeProps={ACTIVE}
           className={LINK_CLASS}
@@ -36,9 +36,6 @@ export function CategoryNav() {
           {c.name}
         </Link>
       ))}
-      <Link to="/district" activeProps={ACTIVE} className={LINK_CLASS}>
-        জেলা
-      </Link>
     </div>
   );
 }
