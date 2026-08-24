@@ -192,3 +192,11 @@
   min-width: 200%;
   animation: mtv-ticker 40s linear infinite;
 }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
