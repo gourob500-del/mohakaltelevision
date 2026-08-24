@@ -91,19 +91,7 @@ export function SiteHeader() {
       </div>
 
       <nav className="border-b border-border bg-card shadow-card">
-        <div className="mx-auto hidden max-w-6xl gap-1 overflow-x-auto px-3 lg:flex">
-          {NAV_LINKS.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeOptions={{ exact: l.to === "/" }}
-              activeProps={{ className: "text-primary border-primary" }}
-              className="whitespace-nowrap border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold hover:text-primary"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
+        <CategoryNav />
 
         {open ? (
           <div className="lg:hidden">
