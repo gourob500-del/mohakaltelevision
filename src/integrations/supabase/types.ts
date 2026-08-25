@@ -180,15 +180,19 @@ export type Database = {
           division_id: string | null
           featured_image: string | null
           id: string
+          images: Json
           is_breaking: boolean
           is_top: boolean
           location: string | null
           published_at: string | null
+          published_by: string | null
+          reporter_designation: string | null
           reporter_name: string | null
           review_note: string | null
           slug: string
           source: string | null
           status: Database["public"]["Enums"]["news_status"]
+          submitted_at: string | null
           summary: string | null
           title: string
           upazila_id: string | null
@@ -206,15 +210,19 @@ export type Database = {
           division_id?: string | null
           featured_image?: string | null
           id?: string
+          images?: Json
           is_breaking?: boolean
           is_top?: boolean
           location?: string | null
           published_at?: string | null
+          published_by?: string | null
+          reporter_designation?: string | null
           reporter_name?: string | null
           review_note?: string | null
           slug: string
           source?: string | null
           status?: Database["public"]["Enums"]["news_status"]
+          submitted_at?: string | null
           summary?: string | null
           title: string
           upazila_id?: string | null
@@ -232,15 +240,19 @@ export type Database = {
           division_id?: string | null
           featured_image?: string | null
           id?: string
+          images?: Json
           is_breaking?: boolean
           is_top?: boolean
           location?: string | null
           published_at?: string | null
+          published_by?: string | null
+          reporter_designation?: string | null
           reporter_name?: string | null
           review_note?: string | null
           slug?: string
           source?: string | null
           status?: Database["public"]["Enums"]["news_status"]
+          submitted_at?: string | null
           summary?: string | null
           title?: string
           upazila_id?: string | null
@@ -279,8 +291,45 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          for_admins: boolean
+          id: string
+          is_read: boolean
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          for_admins?: boolean
+          id?: string
+          is_read?: boolean
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          for_admins?: boolean
+          id?: string
+          is_read?: boolean
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          can_publish: boolean
           created_at: string
           designation: string | null
           district_id: string | null
@@ -296,6 +345,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          can_publish?: boolean
           created_at?: string
           designation?: string | null
           district_id?: string | null
@@ -311,6 +361,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          can_publish?: boolean
           created_at?: string
           designation?: string | null
           district_id?: string | null
@@ -454,6 +505,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_publish: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
