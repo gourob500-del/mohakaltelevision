@@ -46,7 +46,7 @@ function NewNewsPage() {
         status,
         authorId: session!.user.id,
         isAdmin,
-        authorName: profile?.full_name,
+        ...(profile?.full_name ? { authorName: profile.full_name } : {}),
       }),
     onSuccess: (_id, vars) => {
       toast.success(
