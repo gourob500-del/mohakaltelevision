@@ -29,6 +29,7 @@ import { Route as RepresentativeLoginRouteImport } from './routes/representative
 import { Route as RepresentativeRegisterRouteImport } from './routes/representative.register'
 import { Route as AdminNewsIndexRouteImport } from './routes/admin.news.index'
 import { Route as AdminNewsIdRouteImport } from './routes/admin.news.$id'
+import { Route as RepresentativeNewsNewRouteImport } from './routes/representative.news.new'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -131,6 +132,11 @@ const AdminNewsIdRoute = AdminNewsIdRouteImport.update({
   path: '/admin/news/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RepresentativeNewsNewRoute = RepresentativeNewsNewRouteImport.update({
+  id: '/representative/news/new',
+  path: '/representative/news/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
   path: '/api/public/media/$',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/representative/': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
+  '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/representative': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
+  '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/representative/': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
+  '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/representative/'
     | '/admin/news/$id'
+    | '/representative/news/new'
     | '/admin/news/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/representative'
     | '/admin/news/$id'
+    | '/representative/news/new'
     | '/admin/news'
     | '/api/public/media/$'
   id:
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/representative/'
     | '/admin/news/$id'
+    | '/representative/news/new'
     | '/admin/news/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   RepresentativeIndexRoute: typeof RepresentativeIndexRoute
   AdminNewsIdRoute: typeof AdminNewsIdRoute
+  RepresentativeNewsNewRoute: typeof RepresentativeNewsNewRoute
   AdminNewsIndexRoute: typeof AdminNewsIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
@@ -445,6 +458,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/representative/news/new': {
+      id: '/representative/news/new'
+      path: '/representative/news/new'
+      fullPath: '/representative/news/new'
+      preLoaderRoute: typeof RepresentativeNewsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/media/$': {
       id: '/api/public/media/$'
       path: '/api/public/media/$'
@@ -475,6 +495,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   RepresentativeIndexRoute: RepresentativeIndexRoute,
   AdminNewsIdRoute: AdminNewsIdRoute,
+  RepresentativeNewsNewRoute: RepresentativeNewsNewRoute,
   AdminNewsIndexRoute: AdminNewsIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
