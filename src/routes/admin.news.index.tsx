@@ -50,13 +50,27 @@ function AdminNews() {
   const { status } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("ALL");
+  const [districtId, setDistrictId] = useState("ALL");
+  const [authorId, setAuthorId] = useState("ALL");
   const enabled = useAdminReady();
   const qc = useQueryClient();
 
-  const { data: rows = [], isLoading } = useQuery({
-    queryKey: ["admin-news", status, search],
+  const { data: options } = useQuery({
+    queryKey: ["admin-news-filter-options"],
     enabled,
-    queryFn: () => fetchAdminNews(status, search),
+    queryFn: fetchNewsFilterOptions,
+  });
+
+  const { data: rows = [], isLoading } = useQuery({
+    queryKey: ["admin-news", status, search, categoryId, districtId, authorId],
+    enabled,
+    queryFn: () =>
+      fetchAdminNews(status, search, {
+        categoryId: categoryId === "ALL" ? undefined : categoryId,
+        districtId: districtId === "ALL" ? undefined : districtId,
+        authorId: authorId === "ALL" ? undefined : authorId,
+      }),
   });
 
   const invalidate = () => {
