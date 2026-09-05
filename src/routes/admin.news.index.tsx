@@ -103,7 +103,7 @@ function AdminNews() {
           মোট {toBn(rows.length)}টি সংবাদ দেখানো হচ্ছে
         </p>
         <Button asChild>
-          <Link to="/representative/news/new">
+          <Link to="/admin/news/new">
             <Plus className="h-4 w-4" /> নতুন সংবাদ লিখুন
           </Link>
         </Button>
