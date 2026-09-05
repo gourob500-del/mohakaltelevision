@@ -109,9 +109,9 @@ export async function fetchAdminStats() {
 export type AdminNewsFilters = {
   status?: NewsStatus | "ALL";
   search?: string;
-  categoryId?: string;
-  districtId?: string;
-  authorId?: string;
+  categoryId?: string | undefined;
+  districtId?: string | undefined;
+  authorId?: string | undefined;
 };
 
 export async function fetchAdminNews(
