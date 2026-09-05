@@ -198,6 +198,7 @@ function AdminNews() {
                 <p className="mt-1 text-xs text-muted-foreground">
                   {r.category?.name ? `${r.category.name} • ` : ""}
                   {r.district?.name ? `${r.district.name} • ` : ""}
+                  {r.reporter_name ? `${r.reporter_name} • ` : ""}
                   {formatBnDate(r.created_at)} • পাঠক {toBn(r.views)}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
