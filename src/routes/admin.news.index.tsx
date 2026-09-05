@@ -125,12 +125,51 @@ function AdminNews() {
         ))}
       </div>
 
-      <div className="mt-3 max-w-sm">
+      <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="শিরোনাম দিয়ে খুঁজুন"
         />
+        <Select value={categoryId} onValueChange={setCategoryId}>
+          <SelectTrigger>
+            <SelectValue placeholder="ক্যাটাগরি" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব ক্যাটাগরি</SelectItem>
+            {(options?.categories ?? []).map((c) => (
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={districtId} onValueChange={setDistrictId}>
+          <SelectTrigger>
+            <SelectValue placeholder="জেলা" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব জেলা</SelectItem>
+            {(options?.districts ?? []).map((d) => (
+              <SelectItem key={d.id} value={d.id}>
+                {d.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={authorId} onValueChange={setAuthorId}>
+          <SelectTrigger>
+            <SelectValue placeholder="প্রতিবেদক" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব প্রতিবেদক</SelectItem>
+            {(options?.reporters ?? []).map((r) => (
+              <SelectItem key={r.id} value={r.id}>
+                {r.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="mt-4 rounded-lg border border-border bg-card p-3 shadow-card sm:p-4">
