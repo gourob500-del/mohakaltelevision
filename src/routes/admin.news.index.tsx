@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell, EmptyState, useAdminReady } from "@/components/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { deleteNews, fetchAdminNews, setNewsStatus } from "@/lib/admin";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { deleteNews, fetchAdminNews, fetchNewsFilterOptions, setNewsStatus } from "@/lib/admin";
 import { STATUS_BN, STATUS_CLASS, formatBnDate, toBn, type NewsStatus } from "@/lib/mtv";
 
 type Filter = NewsStatus | "ALL";
@@ -42,13 +50,27 @@ function AdminNews() {
   const { status } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("ALL");
+  const [districtId, setDistrictId] = useState("ALL");
+  const [authorId, setAuthorId] = useState("ALL");
   const enabled = useAdminReady();
   const qc = useQueryClient();
 
-  const { data: rows = [], isLoading } = useQuery({
-    queryKey: ["admin-news", status, search],
+  const { data: options } = useQuery({
+    queryKey: ["admin-news-filter-options"],
     enabled,
-    queryFn: () => fetchAdminNews(status, search),
+    queryFn: fetchNewsFilterOptions,
+  });
+
+  const { data: rows = [], isLoading } = useQuery({
+    queryKey: ["admin-news", status, search, categoryId, districtId, authorId],
+    enabled,
+    queryFn: () =>
+      fetchAdminNews(status, search, {
+        categoryId: categoryId === "ALL" ? undefined : categoryId,
+        districtId: districtId === "ALL" ? undefined : districtId,
+        authorId: authorId === "ALL" ? undefined : authorId,
+      }),
   });
 
   const invalidate = () => {
@@ -76,7 +98,18 @@ function AdminNews() {
 
   return (
     <AdminShell title="সংবাদ ব্যবস্থাপনা">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">
+          মোট {toBn(rows.length)}টি সংবাদ দেখানো হচ্ছে
+        </p>
+        <Button asChild>
+          <Link to="/representative/news/new">
+            <Plus className="h-4 w-4" /> নতুন সংবাদ লিখুন
+          </Link>
+        </Button>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f.value}
@@ -92,12 +125,51 @@ function AdminNews() {
         ))}
       </div>
 
-      <div className="mt-3 max-w-sm">
+      <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="শিরোনাম দিয়ে খুঁজুন"
         />
+        <Select value={categoryId} onValueChange={setCategoryId}>
+          <SelectTrigger>
+            <SelectValue placeholder="ক্যাটাগরি" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব ক্যাটাগরি</SelectItem>
+            {(options?.categories ?? []).map((c) => (
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={districtId} onValueChange={setDistrictId}>
+          <SelectTrigger>
+            <SelectValue placeholder="জেলা" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব জেলা</SelectItem>
+            {(options?.districts ?? []).map((d) => (
+              <SelectItem key={d.id} value={d.id}>
+                {d.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={authorId} onValueChange={setAuthorId}>
+          <SelectTrigger>
+            <SelectValue placeholder="প্রতিবেদক" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">সব প্রতিবেদক</SelectItem>
+            {(options?.reporters ?? []).map((r) => (
+              <SelectItem key={r.id} value={r.id}>
+                {r.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="mt-4 rounded-lg border border-border bg-card p-3 shadow-card sm:p-4">
@@ -126,6 +198,7 @@ function AdminNews() {
                 <p className="mt-1 text-xs text-muted-foreground">
                   {r.category?.name ? `${r.category.name} • ` : ""}
                   {r.district?.name ? `${r.district.name} • ` : ""}
+                  {r.reporter_name ? `${r.reporter_name} • ` : ""}
                   {formatBnDate(r.created_at)} • পাঠক {toBn(r.views)}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">

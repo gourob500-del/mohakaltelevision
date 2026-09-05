@@ -106,7 +106,19 @@ export async function fetchAdminStats() {
 
 /* ---------------- news ---------------- */
 
-export async function fetchAdminNews(status?: NewsStatus | "ALL", search?: string) {
+export type AdminNewsFilters = {
+  status?: NewsStatus | "ALL";
+  search?: string;
+  categoryId?: string | undefined;
+  districtId?: string | undefined;
+  authorId?: string | undefined;
+};
+
+export async function fetchAdminNews(
+  status?: NewsStatus | "ALL",
+  search?: string,
+  filters: AdminNewsFilters = {},
+) {
   let q = supabase
     .from("news")
     .select(ADMIN_NEWS_SELECT)
@@ -114,9 +126,41 @@ export async function fetchAdminNews(status?: NewsStatus | "ALL", search?: strin
     .limit(200);
   if (status && status !== "ALL") q = q.eq("status", status);
   if (search && search.trim()) q = q.ilike("title", `%${search.trim()}%`);
+  if (filters.categoryId) q = q.eq("category_id", filters.categoryId);
+  if (filters.districtId) q = q.eq("district_id", filters.districtId);
+  if (filters.authorId) q = q.eq("author_id", filters.authorId);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as unknown as AdminNewsRow[];
+}
+
+export type NewsFilterOptions = {
+  categories: { id: string; name: string }[];
+  districts: { id: string; name: string }[];
+  reporters: { id: string; name: string }[];
+};
+
+export async function fetchNewsFilterOptions(): Promise<NewsFilterOptions> {
+  const [cats, dists, auths] = await Promise.all([
+    supabase.from("categories").select("id, name").order("sort_order"),
+    supabase.from("districts").select("id, name").eq("is_active", true).order("name"),
+    supabase.from("news").select("author_id").not("author_id", "is", null).limit(500),
+  ]);
+  if (cats.error) throw cats.error;
+  if (dists.error) throw dists.error;
+  if (auths.error) throw auths.error;
+  const authorIds = [...new Set((auths.data ?? []).map((a) => a.author_id as string))];
+  let reporters: { id: string; name: string }[] = [];
+  if (authorIds.length) {
+    const { data: profs, error: pErr } = await supabase
+      .from("profiles")
+      .select("id, full_name")
+      .in("id", authorIds);
+    if (pErr) throw pErr;
+    reporters = (profs ?? []).map((p) => ({ id: p.id, name: p.full_name || "নামহীন" }));
+    reporters.sort((a, b) => a.name.localeCompare(b.name, "bn"));
+  }
+  return { categories: cats.data ?? [], districts: dists.data ?? [], reporters };
 }
 
 export async function fetchNewsById(id: string) {
