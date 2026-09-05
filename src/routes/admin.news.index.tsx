@@ -98,7 +98,18 @@ function AdminNews() {
 
   return (
     <AdminShell title="সংবাদ ব্যবস্থাপনা">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">
+          মোট {toBn(rows.length)}টি সংবাদ দেখানো হচ্ছে
+        </p>
+        <Button asChild>
+          <Link to="/representative/news/new">
+            <Plus className="h-4 w-4" /> নতুন সংবাদ লিখুন
+          </Link>
+        </Button>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f.value}
