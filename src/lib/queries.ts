@@ -2,8 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const NEWS_SELECT = `
   id, slug, title, summary, featured_image, caption, video_url, source,
-  reporter_name, location, status, views, published_at, created_at, updated_at,
-  review_note, author_id, is_top, is_breaking, content,
+  reporter_name, reporter_designation, location, status, views, published_at, created_at, updated_at,
+  review_note, author_id, is_top, is_breaking, content, images,
   category:categories(id, name, slug),
   division:divisions(id, name, slug),
   district:districts(id, name, slug),
@@ -20,6 +20,8 @@ export type NewsRow = {
   video_url: string | null;
   source: string | null;
   reporter_name: string | null;
+  reporter_designation: string | null;
+  images: string[];
   location: string | null;
   status: string;
   views: number;
