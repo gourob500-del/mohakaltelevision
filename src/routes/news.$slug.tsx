@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Eye, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
@@ -9,15 +9,71 @@ import { NEWS_SELECT, fetchNewsBySlug, type NewsRow } from "@/lib/queries";
 import { formatBnDate, toBn } from "@/lib/mtv";
 
 export const Route = createFileRoute("/news/$slug")({
+  loader: async ({ params }) => ({ news: await fetchNewsBySlug(params.slug) }),
+  head: ({ loaderData }) => {
+    const n = loaderData?.news;
+    const title = n ? `${n.title} — মহাকাল টেলিভিশন` : "সংবাদ — মহাকাল টেলিভিশন";
+    const description = (n?.summary || n?.title || "মহাকাল টেলিভিশনের সর্বশেষ সংবাদ।").slice(0, 155);
+    const image = n?.featured_image?.startsWith("https://") ? n.featured_image : null;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(image
+          ? [
+              { property: "og:image", content: image },
+              { name: "twitter:image", content: image },
+            ]
+          : []),
+        ...(n ? [] : [{ name: "robots", content: "noindex" }]),
+      ],
+    };
+  },
+  errorComponent: () => (
+    <PublicLayout>
+      <p className="py-20 text-center text-muted-foreground">সংবাদটি লোড করা যায়নি।</p>
+    </PublicLayout>
+  ),
+  notFoundComponent: () => (
+    <PublicLayout>
+      <p className="py-20 text-center text-muted-foreground">সংবাদটি পাওয়া যায়নি।</p>
+    </PublicLayout>
+  ),
   component: NewsDetail,
 });
 
 function NewsDetail() {
   const { slug } = Route.useParams();
+  const initial = Route.useLoaderData();
+  const queryClient = useQueryClient();
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
   const { data: news, isLoading } = useQuery({
     queryKey: ["news", slug],
     queryFn: () => fetchNewsBySlug(slug),
+    initialData: initial?.news ?? undefined,
+  });
+
+  // Live view count: refreshed after our own hit and every 20s while reading.
+  const { data: liveViews } = useQuery({
+    queryKey: ["news-views", slug],
+    enabled: !!news?.id,
+    refetchInterval: 20000,
+    refetchOnWindowFocus: true,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("news")
+        .select("views")
+        .eq("slug", slug)
+        .eq("status", "PUBLISHED")
+        .maybeSingle();
+      if (error) throw error;
+      return (data?.views ?? 0) as number;
+    },
   });
 
   const { data: related } = useQuery({
@@ -40,15 +96,17 @@ function NewsDetail() {
 
   useEffect(() => {
     if (!news?.slug) return;
-    const key = `mtv-view-${news.slug}`;
     if (typeof window === "undefined") return;
+    const key = `mtv-view-${news.slug}`;
     const last = window.sessionStorage.getItem(key);
     if (last && Date.now() - Number(last) < 6 * 60 * 60 * 1000) return;
     window.sessionStorage.setItem(key, String(Date.now()));
-    void supabase.rpc("increment_news_views", { _slug: news.slug });
-  }, [news?.slug]);
+    void supabase
+      .rpc("increment_news_views", { _slug: news.slug })
+      .then(() => queryClient.invalidateQueries({ queryKey: ["news-views", news.slug] }));
+  }, [news?.slug, queryClient]);
 
-  if (isLoading) {
+  if (isLoading && !news) {
     return (
       <PublicLayout>
         <p className="py-20 text-center text-muted-foreground">লোড হচ্ছে...</p>
@@ -75,6 +133,9 @@ function NewsDetail() {
   const place = [news.location, news.upazila?.name, news.district?.name]
     .filter(Boolean)
     .join(", ");
+  const isHtml = /<\/?[a-z][\s\S]*>/i.test(news.content);
+  const gallery = Array.isArray(news.images) ? news.images.filter(Boolean) : [];
+  const views = liveViews ?? news.views;
 
   return (
     <PublicLayout>
@@ -99,7 +160,15 @@ function NewsDetail() {
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-y border-border py-3 text-sm text-muted-foreground">
           {news.reporter_name ? (
-            <span className="font-semibold text-foreground">{news.reporter_name}</span>
+            <span className="font-semibold text-foreground">
+              {news.reporter_name}
+              {news.reporter_designation ? (
+                <span className="font-normal text-muted-foreground">
+                  {" "}
+                  · {news.reporter_designation}
+                </span>
+              ) : null}
+            </span>
           ) : null}
           {place ? (
             <span className="inline-flex items-center gap-1">
@@ -110,8 +179,8 @@ function NewsDetail() {
           {news.updated_at && news.updated_at !== news.published_at ? (
             <span>সর্বশেষ আপডেট: {formatBnDate(news.updated_at)}</span>
           ) : null}
-          <span className="inline-flex items-center gap-1">
-            <Eye className="h-3.5 w-3.5" /> {toBn(news.views)} বার পঠিত
+          <span className="inline-flex items-center gap-1" aria-live="polite">
+            <Eye className="h-3.5 w-3.5" /> {toBn(views)} বার পঠিত
           </span>
         </div>
 
@@ -120,6 +189,7 @@ function NewsDetail() {
             <img
               src={news.featured_image}
               alt={news.caption || news.title}
+              loading="lazy"
               className="w-full rounded-lg border border-border object-cover"
             />
             {news.caption ? (
@@ -130,7 +200,37 @@ function NewsDetail() {
           </figure>
         ) : null}
 
-        <div className="news-body mt-5">{news.content}</div>
+        {isHtml ? (
+          <div
+            className="news-body mt-5"
+            dangerouslySetInnerHTML={{ __html: news.content }}
+          />
+        ) : (
+          <div className="news-body news-body-plain mt-5">{news.content}</div>
+        )}
+
+        {gallery.length ? (
+          <section className="mt-6">
+            <SectionTitle>ছবি</SectionTitle>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {gallery.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  onClick={() => setLightbox(src)}
+                  className="overflow-hidden rounded-lg border border-border"
+                >
+                  <img
+                    src={src}
+                    alt={`${news.title} — ছবি ${toBn(i + 1)}`}
+                    loading="lazy"
+                    className="h-32 w-full object-cover transition-transform hover:scale-105 sm:h-36"
+                  />
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {news.video_url ? (
           <p className="mt-5">
@@ -149,6 +249,17 @@ function NewsDetail() {
           <p className="mt-5 text-sm text-muted-foreground">সূত্র: {news.source}</p>
         ) : null}
       </article>
+
+      {lightbox ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          role="dialog"
+          aria-label="ছবি"
+          onClick={() => setLightbox(null)}
+        >
+          <img src={lightbox} alt={news.title} className="max-h-full max-w-full rounded-lg" />
+        </div>
+      ) : null}
 
       {related?.length ? (
         <section className="mx-auto mt-10 max-w-5xl">
