@@ -161,3 +161,55 @@ export async function logActivity(
     details: details ?? null,
   });
 }
+
+/* ---------------- homepage feed ---------------- */
+
+export type HomeFeed = {
+  all: NewsRow[];
+  latest: NewsRow[];
+  breaking: NewsRow[];
+  top: NewsRow[];
+  popular: NewsRow[];
+  district: NewsRow[];
+  byCategory: { id: string; name: string; slug: string; items: NewsRow[] }[];
+};
+
+/**
+ * Single parse pass for the homepage: loads every published article once and
+ * splits it into the sections (latest, breaking, top, popular, district,
+ * category blocks) instead of firing a query per block.
+ */
+export async function fetchHomeFeed(limit = 200): Promise<HomeFeed> {
+  const [{ data, error }, categories] = await Promise.all([
+    supabase
+      .from("news")
+      .select(NEWS_SELECT)
+      .eq("status", "PUBLISHED")
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false })
+      .limit(limit),
+    fetchCategories(),
+  ]);
+  if (error) throw error;
+
+  const all = (data ?? []) as unknown as NewsRow[];
+
+  const byCategory = (categories as { id: string; name: string; slug: string }[])
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+      items: all.filter((n) => n.category?.id === c.id).slice(0, 4),
+    }))
+    .filter((c) => c.items.length > 0);
+
+  return {
+    all,
+    latest: all.slice(0, 12),
+    breaking: all.filter((n) => n.is_breaking).slice(0, 8),
+    top: all.filter((n) => n.is_top).slice(0, 5),
+    popular: [...all].sort((a, b) => b.views - a.views).slice(0, 6),
+    district: all.filter((n) => !!n.district).slice(0, 8),
+    byCategory,
+  };
+}
