@@ -20,6 +20,8 @@ export type NewsRow = {
   video_url: string | null;
   source: string | null;
   reporter_name: string | null;
+  reporter_designation: string | null;
+  images: string[];
   location: string | null;
   status: string;
   views: number;
