@@ -183,13 +183,15 @@ const ACTION_LABEL: Record<string, string> = {
 };
 
 export async function setNewsStatus(id: string, status: NewsStatus, note?: string) {
-  const patch: Record<string, unknown> = { status };
-  if (status === "PUBLISHED") patch['published_at'] = new Date().toISOString();
-  if (status === "DRAFT") patch['published_at'] = null;
+  // Approving a story sends it live right away, so it appears on the homepage.
+  const next: NewsStatus = status === "APPROVED" ? "PUBLISHED" : status;
+  const patch: Record<string, unknown> = { status: next };
+  if (next === "PUBLISHED") patch['published_at'] = new Date().toISOString();
+  if (next === "DRAFT") patch['published_at'] = null;
   patch['review_note'] = note?.trim() ? note.trim() : null;
   const { error } = await supabase.from("news").update(patch as never).eq("id", id);
   if (error) throw error;
-  await logActivity(ACTION_LABEL[status] ?? "NEWS_UPDATE", "NEWS", id, note ?? undefined);
+  await logActivity(ACTION_LABEL[next] ?? "NEWS_UPDATE", "NEWS", id, note ?? undefined);
 }
 
 export async function updateNews(id: string, patch: Record<string, unknown>) {
