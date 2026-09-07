@@ -174,8 +174,54 @@
 @utility news-body {
   font-size: 1.0625rem;
   line-height: 1.95;
-  white-space: pre-wrap;
   word-break: break-word;
+}
+
+@utility news-body-plain {
+  white-space: pre-wrap;
+}
+
+.news-body p {
+  margin-bottom: 1rem;
+}
+.news-body h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 1.5rem 0 0.75rem;
+}
+.news-body h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+}
+.news-body ul,
+.news-body ol {
+  margin: 0 0 1rem 1.25rem;
+  list-style: disc;
+}
+.news-body ol {
+  list-style: decimal;
+}
+.news-body li {
+  margin-bottom: 0.35rem;
+}
+.news-body a {
+  color: var(--color-brand);
+  text-decoration: underline;
+}
+.news-body blockquote {
+  border-left: 4px solid var(--color-brand);
+  padding-left: 0.9rem;
+  margin: 1rem 0;
+  color: var(--color-muted-foreground);
+}
+.news-body img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+.news-body strong {
+  font-weight: 700;
 }
 
 @keyframes mtv-ticker {
