@@ -1,19 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { NewsCard } from "@/components/NewsCard";
 import { BreakingTicker } from "@/components/BreakingTicker";
-import {
-  NEWS_SELECT,
-  fetchBreakingNews,
-  fetchCategories,
-  fetchDistrictNews,
-  fetchLatestNews,
-  fetchPopularNews,
-  fetchTopNews,
-  type NewsRow,
-} from "@/lib/queries";
+import { fetchHomeFeed, type NewsRow } from "@/lib/queries";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,23 +24,16 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-function CategoryBlock({ slug, name }: { slug: string; name: string }) {
-  const { data } = useQuery({
-    queryKey: ["cat-news", slug],
-    queryFn: async () => {
-      const { data: rows, error } = await supabase
-        .from("news")
-        .select(`${NEWS_SELECT}, categories!inner(slug)`)
-        .eq("status", "PUBLISHED")
-        .eq("categories.slug", slug)
-        .order("published_at", { ascending: false })
-        .limit(4);
-      if (error) throw error;
-      return (rows ?? []) as unknown as NewsRow[];
-    },
-  });
-
-  if (!data?.length) return null;
+function CategoryBlock({
+  slug,
+  name,
+  items,
+}: {
+  slug: string;
+  name: string;
+  items: NewsRow[];
+}) {
+  if (!items.length) return null;
 
   return (
     <section className="mt-8">
@@ -64,7 +47,7 @@ function CategoryBlock({ slug, name }: { slug: string; name: string }) {
         {name}
       </SectionTitle>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {data.map((n) => (
+        {items.map((n) => (
           <NewsCard key={n.id} news={n} />
         ))}
       </div>
@@ -73,18 +56,17 @@ function CategoryBlock({ slug, name }: { slug: string; name: string }) {
 }
 
 function Home() {
-  const { data: breaking } = useQuery({ queryKey: ["breaking"], queryFn: () => fetchBreakingNews() });
-  const { data: latest, isLoading } = useQuery({
-    queryKey: ["latest", 12],
-    queryFn: () => fetchLatestNews(12),
+  const { data: feed, isLoading } = useQuery({
+    queryKey: ["home-feed"],
+    queryFn: () => fetchHomeFeed(),
   });
-  const { data: top } = useQuery({ queryKey: ["top"], queryFn: () => fetchTopNews(5) });
-  const { data: popular } = useQuery({ queryKey: ["popular"], queryFn: () => fetchPopularNews(6) });
-  const { data: districtNews } = useQuery({
-    queryKey: ["district-news"],
-    queryFn: () => fetchDistrictNews(8),
-  });
-  const { data: categories } = useQuery({ queryKey: ["categories"], queryFn: () => fetchCategories() });
+
+  const breaking = feed?.breaking;
+  const latest = feed?.latest;
+  const top = feed?.top;
+  const popular = feed?.popular;
+  const districtNews = feed?.district;
+  const categories = feed?.byCategory;
 
   const lead = latest?.[0];
   const rest = latest?.slice(1, 9) ?? [];
@@ -159,7 +141,7 @@ function Home() {
       ) : null}
 
       {(categories ?? []).map((c) => (
-        <CategoryBlock key={c.id} slug={c.slug} name={c.name} />
+        <CategoryBlock key={c.id} slug={c.slug} name={c.name} items={c.items} />
       ))}
     </PublicLayout>
   );
