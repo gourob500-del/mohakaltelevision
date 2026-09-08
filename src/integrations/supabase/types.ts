@@ -291,6 +291,91 @@ export type Database = {
           },
         ]
       }
+      news_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          news_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          author_name: string
+          body: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          news_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          news_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_comments_news_id_fkey"
+            columns: ["news_id"]
+            isOneToOne: false
+            referencedRelation: "news"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_reports: {
+        Row: {
+          contact: string | null
+          created_at: string
+          details: string | null
+          id: string
+          is_resolved: boolean
+          news_id: string
+          reason: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          contact?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_resolved?: boolean
+          news_id: string
+          reason: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          contact?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_resolved?: boolean
+          news_id?: string
+          reason?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_reports_news_id_fkey"
+            columns: ["news_id"]
+            isOneToOne: false
+            referencedRelation: "news"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
