@@ -454,11 +454,16 @@ export type Database = {
           about_text: string
           contact_email: string | null
           contact_number: string
+          editor_name: string
+          executive_editor_name: string
           facebook_url: string | null
           favicon_url: string | null
           id: number
           instagram_url: string | null
           logo_url: string | null
+          news_editor_name: string
+          office_address: string
+          publisher_name: string
           site_name: string
           tagline: string
           twitter_url: string | null
@@ -470,11 +475,16 @@ export type Database = {
           about_text?: string
           contact_email?: string | null
           contact_number?: string
+          editor_name?: string
+          executive_editor_name?: string
           facebook_url?: string | null
           favicon_url?: string | null
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
+          news_editor_name?: string
+          office_address?: string
+          publisher_name?: string
           site_name?: string
           tagline?: string
           twitter_url?: string | null
@@ -486,11 +496,16 @@ export type Database = {
           about_text?: string
           contact_email?: string | null
           contact_number?: string
+          editor_name?: string
+          executive_editor_name?: string
           facebook_url?: string | null
           favicon_url?: string | null
           id?: number
           instagram_url?: string | null
           logo_url?: string | null
+          news_editor_name?: string
+          office_address?: string
+          publisher_name?: string
           site_name?: string
           tagline?: string
           twitter_url?: string | null

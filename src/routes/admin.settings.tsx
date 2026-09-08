@@ -29,7 +29,12 @@ export const Route = createFileRoute("/admin/settings")({
 const FIELDS: { key: string; label: string }[] = [
   { key: "site_name", label: "ওয়েবসাইটের নাম" },
   { key: "tagline", label: "ট্যাগলাইন" },
-  { key: "contact_number", label: "যোগাযোগ নম্বর" },
+  { key: "editor_name", label: "সম্পাদক" },
+  { key: "news_editor_name", label: "বার্তা সম্পাদক" },
+  { key: "executive_editor_name", label: "নির্বাহী সম্পাদক" },
+  { key: "publisher_name", label: "প্রকাশক" },
+  { key: "office_address", label: "অফিসের ঠিকানা" },
+  { key: "contact_number", label: "মোবাইল" },
   { key: "contact_email", label: "ই-মেইল" },
   { key: "facebook_url", label: "ফেসবুক লিংক" },
   { key: "youtube_url", label: "ইউটিউব লিংক" },
