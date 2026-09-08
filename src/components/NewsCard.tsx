@@ -43,7 +43,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
     <Link
       to="/news/$slug"
       params={{ slug: news.slug }}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-colors hover:border-primary/40"
+      className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-colors hover:border-primary/40"
     >
       <div
         className={`relative w-full overflow-hidden bg-muted ${lead ? "aspect-[16/9]" : "aspect-[4/3]"}`}
@@ -66,7 +66,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
           </span>
         ) : null}
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="flex flex-col gap-2 p-3">
         <h3
           className={`line-clamp-3 font-bold group-hover:text-primary ${lead ? "text-xl" : "text-base"}`}
         >
@@ -75,7 +75,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
         {lead && news.summary ? (
           <p className="line-clamp-2 text-sm text-muted-foreground">{news.summary}</p>
         ) : null}
-        <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           {place ? (
             <span className="inline-flex items-center gap-1">
               <MapPin className="h-3 w-3" />
