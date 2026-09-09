@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { applyWatermark, getWatermarkConfig } from "@/lib/watermark";
 
 export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -47,21 +48,29 @@ export async function uploadImage(file: File, folder = "news"): Promise<string> 
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) throw new Error("লগইন প্রয়োজন।");
 
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  // Burn the site watermark into the stored file so downloads keep it too.
+  let outFile = file;
+  try {
+    outFile = await applyWatermark(file, await getWatermarkConfig());
+  } catch {
+    outFile = file;
+  }
+
+  const ext = (outFile.name.split(".").pop() || "jpg").toLowerCase();
   const path = `${folder}/${auth.user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
   const { error } = await supabase.storage
     .from("media")
-    .upload(path, file, { contentType: file.type, upsert: false });
+    .upload(path, outFile, { contentType: outFile.type, upsert: false });
   if (error) throw error;
 
   const url = `/api/public/media/${path}`;
   await supabase.from("media").insert({
     url,
     path,
-    file_name: file.name,
-    mime_type: file.type,
-    size_bytes: file.size,
+    file_name: outFile.name,
+    mime_type: outFile.type,
+    size_bytes: outFile.size,
     uploaded_by: auth.user.id,
   });
 
