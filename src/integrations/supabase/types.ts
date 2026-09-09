@@ -513,6 +513,27 @@ export type Database = {
           },
         ]
       }
+      user_permissions: {
+        Row: {
+          created_at: string
+          id: string
+          module: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          module: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          module?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -553,6 +574,9 @@ export type Database = {
           tagline: string
           twitter_url: string | null
           updated_at: string
+          watermark_enabled: boolean
+          watermark_opacity: number
+          watermark_position: string
           website_url: string
           youtube_url: string | null
         }
@@ -574,6 +598,9 @@ export type Database = {
           tagline?: string
           twitter_url?: string | null
           updated_at?: string
+          watermark_enabled?: boolean
+          watermark_opacity?: number
+          watermark_position?: string
           website_url?: string
           youtube_url?: string | null
         }
@@ -595,6 +622,9 @@ export type Database = {
           tagline?: string
           twitter_url?: string | null
           updated_at?: string
+          watermark_enabled?: boolean
+          watermark_opacity?: number
+          watermark_position?: string
           website_url?: string
           youtube_url?: string | null
         }
@@ -606,6 +636,10 @@ export type Database = {
     }
     Functions: {
       can_publish: { Args: { _user_id: string }; Returns: boolean }
+      has_permission: {
+        Args: { _module: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
