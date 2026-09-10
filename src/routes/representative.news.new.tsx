@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, PenSquare } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardShell } from "@/components/DashboardShell";
 import { NewsForm } from "@/components/NewsForm";
 import { useAuth } from "@/hooks/useAuth";
+import { REP_NAV, prefillFromProfile } from "@/lib/rep-nav";
 import { saveNews } from "@/lib/news";
 import type { NewsFormValues } from "@/lib/news";
 import type { NewsStatus } from "@/lib/mtv";
