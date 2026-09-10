@@ -55,11 +55,18 @@ function RepDashboard() {
   const views = rows.reduce((sum, r) => sum + (r.views ?? 0), 0);
 
   return (
-    <DashboardShell
-      title="প্রতিনিধি ড্যাশবোর্ড"
-      accent="প্রতিনিধি প্যানেল"
-      items={[{ label: "ড্যাশবোর্ড", to: "/representative", icon: LayoutDashboard, exact: true }]}
-    >
+    <DashboardShell title="প্রতিনিধি ড্যাশবোর্ড" accent="প্রতিনিধি প্যানেল" items={REP_NAV}>
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <Button asChild>
+          <Link to="/representative/news/new">
+            <PenSquare className="mr-2 h-4 w-4" /> নতুন সংবাদ পাঠান
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link to="/representative/news">আমার সংবাদ</Link>
+        </Button>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="মোট সংবাদ" value={toBn(rows.length)} tone="primary" />
         <StatCard label="প্রকাশিত" value={toBn(count("PUBLISHED"))} />
