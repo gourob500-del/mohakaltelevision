@@ -30,6 +30,7 @@ import { Route as RepresentativeRegisterRouteImport } from './routes/representat
 import { Route as AdminNewsIndexRouteImport } from './routes/admin.news.index'
 import { Route as AdminNewsIdRouteImport } from './routes/admin.news.$id'
 import { Route as AdminNewsNewRouteImport } from './routes/admin.news.new'
+import { Route as RepresentativeNewsIndexRouteImport } from './routes/representative.news.index'
 import { Route as RepresentativeNewsNewRouteImport } from './routes/representative.news.new'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
@@ -138,6 +139,11 @@ const AdminNewsNewRoute = AdminNewsNewRouteImport.update({
   path: '/admin/news/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RepresentativeNewsIndexRoute = RepresentativeNewsIndexRouteImport.update({
+  id: '/representative/news/',
+  path: '/representative/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RepresentativeNewsNewRoute = RepresentativeNewsNewRouteImport.update({
   id: '/representative/news/new',
   path: '/representative/news/new',
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/admin/news/new': typeof AdminNewsNewRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
+  '/representative/news/': typeof RepresentativeNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
@@ -197,6 +204,7 @@ export interface FileRoutesByTo {
   '/admin/news/new': typeof AdminNewsNewRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news': typeof AdminNewsIndexRoute
+  '/representative/news': typeof RepresentativeNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
@@ -223,6 +231,7 @@ export interface FileRoutesById {
   '/admin/news/new': typeof AdminNewsNewRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
+  '/representative/news/': typeof RepresentativeNewsIndexRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
@@ -250,6 +259,7 @@ export interface FileRouteTypes {
     | '/admin/news/new'
     | '/representative/news/new'
     | '/admin/news/'
+    | '/representative/news/'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/admin/news/new'
     | '/representative/news/new'
     | '/admin/news'
+    | '/representative/news'
     | '/api/public/media/$'
   id:
     | '__root__'
@@ -300,6 +311,7 @@ export interface FileRouteTypes {
     | '/admin/news/new'
     | '/representative/news/new'
     | '/admin/news/'
+    | '/representative/news/'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
@@ -326,6 +338,7 @@ export interface RootRouteChildren {
   AdminNewsNewRoute: typeof AdminNewsNewRoute
   RepresentativeNewsNewRoute: typeof RepresentativeNewsNewRoute
   AdminNewsIndexRoute: typeof AdminNewsIndexRoute
+  RepresentativeNewsIndexRoute: typeof RepresentativeNewsIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -478,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/representative/news/': {
+      id: '/representative/news/'
+      path: '/representative/news'
+      fullPath: '/representative/news/'
+      preLoaderRoute: typeof RepresentativeNewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/representative/news/new': {
       id: '/representative/news/new'
       path: '/representative/news/new'
@@ -518,6 +538,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminNewsNewRoute: AdminNewsNewRoute,
   RepresentativeNewsNewRoute: RepresentativeNewsNewRoute,
   AdminNewsIndexRoute: AdminNewsIndexRoute,
+  RepresentativeNewsIndexRoute: RepresentativeNewsIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, PenSquare } from "lucide-react";
 import { toast } from "sonner";
 import { DashboardShell } from "@/components/DashboardShell";
 import { NewsForm } from "@/components/NewsForm";
 import { useAuth } from "@/hooks/useAuth";
+import { REP_NAV, prefillFromProfile } from "@/lib/rep-nav";
 import { saveNews } from "@/lib/news";
 import type { NewsFormValues } from "@/lib/news";
 import type { NewsStatus } from "@/lib/mtv";
@@ -49,6 +49,7 @@ function NewNewsPage() {
         ...(profile?.full_name ? { authorName: profile.full_name } : {}),
       }),
     onSuccess: (_id, vars) => {
+      void qc.invalidateQueries({ queryKey: ["my-news"] });
       toast.success(
         vars.status === "DRAFT"
           ? "খসড়া সংরক্ষিত হয়েছে"
@@ -57,21 +58,16 @@ function NewNewsPage() {
             : "সংবাদ রিভিউয়ের জন্য পাঠানো হয়েছে",
       );
       void qc.invalidateQueries({ queryKey: ["rep-news"] });
-      void navigate({ to: "/representative" });
+      void navigate({ to: "/representative/news" });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "সংরক্ষণ ব্যর্থ হয়েছে"),
   });
 
   return (
-    <DashboardShell
-      title="নতুন সংবাদ"
-      accent="প্রতিনিধি প্যানেল"
-      items={[
-        { label: "ড্যাশবোর্ড", to: "/representative", icon: LayoutDashboard, exact: true },
-        { label: "নতুন সংবাদ", to: "/representative/news/new", icon: PenSquare },
-      ]}
-    >
+    <DashboardShell title="নতুন সংবাদ" accent="প্রতিনিধি প্যানেল" items={REP_NAV}>
       <NewsForm
+        key={profile?.id ?? "new"}
+        initial={prefillFromProfile(profile)}
         canPublish={canPublish}
         submitting={save.isPending}
         onSave={(values, status) => save.mutate({ values, status })}
