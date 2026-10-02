@@ -636,6 +636,7 @@ export type Database = {
     }
     Functions: {
       can_publish: { Args: { _user_id: string }; Returns: boolean }
+      get_public_website_settings: { Args: never; Returns: Json }
       has_permission: {
         Args: { _module: string; _user_id: string }
         Returns: boolean
