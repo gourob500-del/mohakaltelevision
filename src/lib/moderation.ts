@@ -55,11 +55,12 @@ export async function submitComment(input: {
   if (name.length < 2) throw new Error("নাম কমপক্ষে ২ অক্ষরের হতে হবে।");
   if (body.length < 3) throw new Error("মন্তব্য লিখুন।");
   if (body.length > 1000) throw new Error("মন্তব্য ১০০০ অক্ষরের বেশি হতে পারবে না।");
+  const { data: auth } = await supabase.auth.getUser();
   const { error } = await supabase.from("news_comments").insert({
     news_id: input.news_id,
     author_name: name,
     body,
-    user_id: input.user_id ?? null,
+    user_id: auth.user?.id ?? null,
     is_approved: false,
   } as never);
   if (error) throw error;
@@ -73,12 +74,13 @@ export async function submitReport(input: {
   user_id?: string | null;
 }) {
   if (!input.reason) throw new Error("কারণ নির্বাচন করুন।");
+  const { data: auth } = await supabase.auth.getUser();
   const { error } = await supabase.from("news_reports").insert({
     news_id: input.news_id,
     reason: input.reason,
     details: input.details?.trim() || null,
     contact: input.contact?.trim() || null,
-    user_id: input.user_id ?? null,
+    user_id: auth.user?.id ?? null,
   } as never);
   if (error) throw error;
 }
