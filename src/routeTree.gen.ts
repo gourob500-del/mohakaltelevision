@@ -19,9 +19,12 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminLogsRouteImport } from './routes/admin.logs'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminModerationRouteImport } from './routes/admin.moderation'
 import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as RepresentativeIndexRouteImport } from './routes/representative.index'
@@ -84,9 +87,19 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLogsRoute = AdminLogsRouteImport.update({
+  id: '/admin/logs',
+  path: '/admin/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMediaRoute = AdminMediaRouteImport.update({
   id: '/admin/media',
   path: '/admin/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminModerationRoute = AdminModerationRouteImport.update({
+  id: '/admin/moderation',
+  path: '/admin/moderation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
@@ -97,6 +110,11 @@ const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/admin/settings',
   path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -165,9 +183,12 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -191,9 +212,12 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -218,9 +242,12 @@ export interface FileRoutesById {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/category/$slug': typeof CategorySlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/representative/login': typeof RepresentativeLoginRoute
@@ -246,9 +273,12 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
+    | '/admin/logs'
     | '/admin/media'
+    | '/admin/moderation'
     | '/admin/representatives'
     | '/admin/settings'
+    | '/admin/users'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -272,9 +302,12 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
+    | '/admin/logs'
     | '/admin/media'
+    | '/admin/moderation'
     | '/admin/representatives'
     | '/admin/settings'
+    | '/admin/users'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -298,9 +331,12 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
+    | '/admin/logs'
     | '/admin/media'
+    | '/admin/moderation'
     | '/admin/representatives'
     | '/admin/settings'
+    | '/admin/users'
     | '/category/$slug'
     | '/news/$slug'
     | '/representative/login'
@@ -325,9 +361,12 @@ export interface RootRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminLogsRoute: typeof AdminLogsRoute
   AdminMediaRoute: typeof AdminMediaRoute
+  AdminModerationRoute: typeof AdminModerationRoute
   AdminRepresentativesRoute: typeof AdminRepresentativesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   CategorySlugRoute: typeof CategorySlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   RepresentativeLoginRoute: typeof RepresentativeLoginRoute
@@ -414,11 +453,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/logs': {
+      id: '/admin/logs'
+      path: '/admin/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AdminLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/media': {
       id: '/admin/media'
       path: '/admin/media'
       fullPath: '/admin/media'
       preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/moderation': {
+      id: '/admin/moderation'
+      path: '/admin/moderation'
+      fullPath: '/admin/moderation'
+      preLoaderRoute: typeof AdminModerationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/representatives': {
@@ -433,6 +486,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -525,9 +585,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminLogsRoute: AdminLogsRoute,
   AdminMediaRoute: AdminMediaRoute,
+  AdminModerationRoute: AdminModerationRoute,
   AdminRepresentativesRoute: AdminRepresentativesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   CategorySlugRoute: CategorySlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   RepresentativeLoginRoute: RepresentativeLoginRoute,

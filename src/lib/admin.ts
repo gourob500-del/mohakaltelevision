@@ -334,6 +334,12 @@ export async function updateSettings(patch: Record<string, unknown>) {
   await logActivity("SETTINGS_UPDATE", "SETTINGS", "1");
 }
 
+export async function fetchAdminSettings() {
+  const { data, error } = await supabase.from("website_settings").select("*").eq("id", 1).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 /* ---------------- activity logs ---------------- */
 
 export async function fetchActivityLogs(limit = 200) {

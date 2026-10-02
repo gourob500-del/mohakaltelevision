@@ -8,6 +8,8 @@ import {
   MapPin,
   ScrollText,
   Settings,
+  ShieldCheck,
+  MessagesSquare,
   Users,
 } from "lucide-react";
 import { DashboardShell, type NavItem } from "@/components/DashboardShell";
@@ -21,6 +23,8 @@ export const ADMIN_NAV: NavItem[] = [
   { label: "জেলা ও উপজেলা", to: "/admin/locations", icon: MapPin },
   { label: "মিডিয়া লাইব্রেরি", to: "/admin/media", icon: Image },
   { label: "ওয়েবসাইট সেটিংস", to: "/admin/settings", icon: Settings },
+  { label: "অ্যাডমিন ও অনুমতি", to: "/admin/users", icon: ShieldCheck },
+  { label: "মন্তব্য ও রিপোর্ট", to: "/admin/moderation", icon: MessagesSquare },
   { label: "অ্যাক্টিভিটি লগ", to: "/admin/logs", icon: ScrollText },
 ];
 

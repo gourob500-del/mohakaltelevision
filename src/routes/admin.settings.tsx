@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { updateSettings } from "@/lib/admin";
-import { fetchSettings } from "@/lib/queries";
+import { fetchAdminSettings, updateSettings } from "@/lib/admin";
+import { clearWatermarkCache, WATERMARK_POSITIONS } from "@/lib/watermark";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({
@@ -47,11 +47,14 @@ function AdminSettings() {
   const enabled = useAdminReady();
   const qc = useQueryClient();
   const [form, setForm] = useState<Record<string, string>>({});
+  const [watermarkEnabled, setWatermarkEnabled] = useState(true);
+  const [watermarkPosition, setWatermarkPosition] = useState("bottom-right");
+  const [watermarkOpacity, setWatermarkOpacity] = useState(0.6);
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ["settings"],
     enabled,
-    queryFn: fetchSettings,
+    queryFn: fetchAdminSettings,
   });
 
   useEffect(() => {
@@ -62,6 +65,9 @@ function AdminSettings() {
     next['logo_url'] = settings.logo_url ?? "";
     next['favicon_url'] = settings.favicon_url ?? "";
     setForm(next);
+    setWatermarkEnabled(settings.watermark_enabled ?? true);
+    setWatermarkPosition(settings.watermark_position ?? "bottom-right");
+    setWatermarkOpacity(Number(settings.watermark_opacity ?? 0.6));
   }, [settings]);
 
   const save = useMutation({
@@ -76,10 +82,14 @@ function AdminSettings() {
       patch['about_text'] = form['about_text'] ?? "";
       patch['logo_url'] = form['logo_url'] || null;
       patch['favicon_url'] = form['favicon_url'] || null;
+      patch['watermark_enabled'] = watermarkEnabled;
+      patch['watermark_position'] = watermarkPosition;
+      patch['watermark_opacity'] = watermarkOpacity;
       await updateSettings(patch);
     },
     onSuccess: () => {
       toast.success("সেটিংস সংরক্ষিত হয়েছে");
+      clearWatermarkCache();
       void qc.invalidateQueries({ queryKey: ["settings"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "সংরক্ষণ ব্যর্থ"),
@@ -125,6 +135,16 @@ function AdminSettings() {
               folder="branding"
               onChange={(url) => setForm({ ...form, favicon_url: url ?? "" })}
             />
+          </div>
+          <div className="sm:col-span-2 rounded border border-border p-3">
+            <div className="flex items-center justify-between gap-3">
+              <div><p className="text-sm font-bold">নিউজ ছবিতে ওয়াটারমার্ক</p><p className="text-xs text-muted-foreground">আপলোডের সময় ছবি ও গ্যালারিতে স্থায়ীভাবে যুক্ত হবে</p></div>
+              <Button type="button" variant={watermarkEnabled ? "default" : "outline"} size="sm" onClick={() => setWatermarkEnabled((value) => !value)}>{watermarkEnabled ? "চালু" : "বন্ধ"}</Button>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div><Label htmlFor="watermark-position">অবস্থান</Label><select id="watermark-position" className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={watermarkPosition} onChange={(e) => setWatermarkPosition(e.target.value)}>{WATERMARK_POSITIONS.map((position) => <option key={position.value} value={position.value}>{position.label}</option>)}</select></div>
+              <div><Label htmlFor="watermark-opacity">স্বচ্ছতা: {Math.round(watermarkOpacity * 100)}%</Label><input id="watermark-opacity" type="range" min="0.1" max="1" step="0.05" value={watermarkOpacity} onChange={(e) => setWatermarkOpacity(Number(e.target.value))} className="mt-3 w-full accent-primary" /></div>
+            </div>
           </div>
           <div className="sm:col-span-2">
             <Button onClick={() => save.mutate()} disabled={save.isPending}>

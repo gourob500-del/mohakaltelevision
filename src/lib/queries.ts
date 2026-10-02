@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getPublicWebsiteSettings } from "@/lib/settings.functions";
 
 export const NEWS_SELECT = `
   id, slug, title, summary, featured_image, caption, video_url, source,
@@ -130,13 +131,33 @@ export async function fetchUpazilas(districtId?: string | null) {
 }
 
 export async function fetchSettings() {
-  const { data, error } = await supabase
-    .from("website_settings")
-    .select("*")
-    .eq("id", 1)
-    .maybeSingle();
-  if (error) throw error;
-  return data;
+  return getPublicWebsiteSettings();
+}
+
+export async function fetchAdjacentNews(publishedAt: string, id: string) {
+  const [previous, next] = await Promise.all([
+    supabase
+      .from("news")
+      .select("id, slug, title")
+      .eq("status", "PUBLISHED")
+      .neq("id", id)
+      .lt("published_at", publishedAt)
+      .order("published_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("news")
+      .select("id, slug, title")
+      .eq("status", "PUBLISHED")
+      .neq("id", id)
+      .gt("published_at", publishedAt)
+      .order("published_at", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (previous.error) throw previous.error;
+  if (next.error) throw next.error;
+  return { previous: previous.data, next: next.data };
 }
 
 export async function logActivity(
