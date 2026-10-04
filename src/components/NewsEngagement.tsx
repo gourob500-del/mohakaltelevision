@@ -65,9 +65,9 @@ export function NewsEngagement({
   return (
     <>
       <section ref={commentRef} className="no-print mt-8 border-t border-border pt-6" id="comments">
-        <div className="flex items-center justify-between gap-2">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
           <h2 className="text-lg font-bold">মন্তব্য ({comments.length})</h2>
-          <div className="flex gap-2">
+          <div className="flex shrink-0 flex-wrap justify-end gap-2">
             <Button size="sm" onClick={() => { setName(profile?.full_name ?? name); setCommentOpen(true); }}>মন্তব্য করুন</Button>
             <Button size="sm" variant="outline" onClick={() => setReportOpen(true)}>রিপোর্ট করুন</Button>
           </div>
@@ -90,7 +90,7 @@ export function NewsEngagement({
       </section>
 
       <Dialog open={commentOpen} onOpenChange={setCommentOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto">
           <DialogHeader><DialogTitle>মন্তব্য করুন</DialogTitle><DialogDescription>মন্তব্য অনুমোদনের পর সবার কাছে দেখা যাবে।</DialogDescription></DialogHeader>
           <div className="space-y-3">
             <div><Label htmlFor="comment-name">নাম</Label><Input id="comment-name" value={name} disabled={!!profile?.full_name} onChange={(e) => setName(e.target.value)} /></div>
@@ -101,7 +101,7 @@ export function NewsEngagement({
       </Dialog>
 
       <Dialog open={reportOpen} onOpenChange={setReportOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto">
           <DialogHeader><DialogTitle>সংবাদ রিপোর্ট করুন</DialogTitle><DialogDescription>সমস্যার কারণ ও প্রয়োজনীয় তথ্য দিন।</DialogDescription></DialogHeader>
           <div className="space-y-3">
             <div><Label htmlFor="report-reason">কারণ</Label><select id="report-reason" className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={reason} onChange={(e) => setReason(e.target.value)}>{REPORT_REASONS.map((item) => <option key={item}>{item}</option>)}</select></div>
