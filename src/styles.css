@@ -246,3 +246,10 @@
     display: none;
   }
 }
+
+@media print {
+  header nav, footer, .no-print, [role="dialog"] { display: none !important; }
+  body { background: #fff; color: #000; }
+  article { max-width: 100% !important; }
+  img { max-width: 100%; page-break-inside: avoid; }
+}
