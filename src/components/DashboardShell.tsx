@@ -69,7 +69,7 @@ export function DashboardShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-3 border-b border-border bg-card px-3 py-3">
+        <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b border-border bg-card px-3 py-3 sm:gap-3">
           <Button
             variant="ghost"
             size="icon"
@@ -80,12 +80,12 @@ export function DashboardShell({
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
           <h1 className="truncate text-base font-bold sm:text-lg">{title}</h1>
-          <span className="ml-auto truncate text-xs text-muted-foreground sm:text-sm">
+          <span className="max-w-24 truncate text-right text-xs text-muted-foreground sm:max-w-48 sm:text-sm">
             {profile?.full_name || ""}
           </span>
         </header>
 
-        {open ? <div className="bg-sidebar p-3 lg:hidden">{nav}</div> : null}
+        {open ? <div className="max-h-[calc(100dvh-3.75rem)] overflow-y-auto bg-sidebar p-3 lg:hidden">{nav}</div> : null}
 
         <div className="min-w-0 flex-1 p-3 sm:p-5">{children}</div>
       </div>

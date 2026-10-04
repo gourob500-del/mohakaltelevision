@@ -315,7 +315,7 @@ function NewsDetail() {
       {related?.length ? (
         <section className="no-print mx-auto mt-10 max-w-5xl">
           <SectionTitle>সম্পর্কিত সংবাদ</SectionTitle>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((n) => (
               <NewsCard key={n.id} news={n} />
             ))}
