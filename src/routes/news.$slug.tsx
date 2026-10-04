@@ -5,7 +5,9 @@ import { Eye, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { NewsCard } from "@/components/NewsCard";
-import { NEWS_SELECT, fetchNewsBySlug, type NewsRow } from "@/lib/queries";
+import { NewsActionBar } from "@/components/NewsActionBar";
+import { NewsEngagement } from "@/components/NewsEngagement";
+import { NEWS_SELECT, fetchAdjacentNews, fetchNewsBySlug, type NewsRow } from "@/lib/queries";
 import { formatBnDate, toBn } from "@/lib/mtv";
 
 export const Route = createFileRoute("/news/$slug")({
@@ -51,11 +53,20 @@ function NewsDetail() {
   const initial = Route.useLoaderData();
   const queryClient = useQueryClient();
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState(18);
+  const [commentSignal, setCommentSignal] = useState(0);
+  const [reportSignal, setReportSignal] = useState(0);
 
   const { data: news, isLoading } = useQuery({
     queryKey: ["news", slug],
     queryFn: () => fetchNewsBySlug(slug),
     initialData: initial?.news ?? undefined,
+  });
+
+  const { data: adjacent } = useQuery({
+    queryKey: ["adjacent", news?.id],
+    enabled: !!news?.id && !!news?.published_at,
+    queryFn: () => fetchAdjacentNews(news!.published_at!, news!.id),
   });
 
   // Live view count: refreshed after our own hit and every 20s while reading.
@@ -184,6 +195,17 @@ function NewsDetail() {
           </span>
         </div>
 
+        <NewsActionBar
+          newsId={news.id}
+          slug={news.slug}
+          title={news.title}
+          image={news.featured_image}
+          fontSize={fontSize}
+          onFontSize={setFontSize}
+          onComment={() => setCommentSignal((n) => n + 1)}
+          onReport={() => setReportSignal((n) => n + 1)}
+        />
+
         {news.featured_image ? (
           <figure className="mt-4">
             <img
@@ -200,14 +222,16 @@ function NewsDetail() {
           </figure>
         ) : null}
 
-        {isHtml ? (
-          <div
-            className="news-body mt-5"
-            dangerouslySetInnerHTML={{ __html: news.content }}
-          />
-        ) : (
-          <div className="news-body news-body-plain mt-5">{news.content}</div>
-        )}
+        <div data-news-content style={{ fontSize: `${fontSize}px` }}>
+          {isHtml ? (
+            <div
+              className="news-body mt-5"
+              dangerouslySetInnerHTML={{ __html: news.content }}
+            />
+          ) : (
+            <div className="news-body news-body-plain mt-5">{news.content}</div>
+          )}
+        </div>
 
         {gallery.length ? (
           <section className="mt-6">
@@ -233,7 +257,7 @@ function NewsDetail() {
         ) : null}
 
         {news.video_url ? (
-          <p className="mt-5">
+          <p className="no-print mt-5">
             <a
               href={news.video_url}
               target="_blank"
@@ -248,6 +272,33 @@ function NewsDetail() {
         {news.source ? (
           <p className="mt-5 text-sm text-muted-foreground">সূত্র: {news.source}</p>
         ) : null}
+
+        {adjacent && (adjacent.previous || adjacent.next) ? (
+          <nav className="no-print mt-8 grid gap-3 sm:grid-cols-2" aria-label="অন্যান্য সংবাদ">
+            {adjacent.previous ? (
+              <Link
+                to="/news/$slug"
+                params={{ slug: adjacent.previous.slug }}
+                className="rounded-lg border border-border p-3 hover:border-primary"
+              >
+                <span className="text-xs text-muted-foreground">← আগের সংবাদ</span>
+                <span className="mt-1 block font-semibold leading-snug">{adjacent.previous.title}</span>
+              </Link>
+            ) : <span />}
+            {adjacent.next ? (
+              <Link
+                to="/news/$slug"
+                params={{ slug: adjacent.next.slug }}
+                className="rounded-lg border border-border p-3 text-right hover:border-primary"
+              >
+                <span className="text-xs text-muted-foreground">পরের সংবাদ →</span>
+                <span className="mt-1 block font-semibold leading-snug">{adjacent.next.title}</span>
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
+
+        <NewsEngagement newsId={news.id} commentSignal={commentSignal} reportSignal={reportSignal} />
       </article>
 
       {lightbox ? (

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,26 @@ import { useAuth } from "@/hooks/useAuth";
 import { fetchApprovedComments, REPORT_REASONS, submitComment, submitReport } from "@/lib/moderation";
 import { formatBnDate } from "@/lib/mtv";
 
-export function NewsEngagement({ newsId }: { newsId: string }) {
+export function NewsEngagement({
+  newsId,
+  commentSignal = 0,
+  reportSignal = 0,
+}: {
+  newsId: string;
+  commentSignal?: number;
+  reportSignal?: number;
+}) {
   const { user, profile } = useAuth();
   const qc = useQueryClient();
   const commentRef = useRef<HTMLElement>(null);
   const [commentOpen, setCommentOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  useEffect(() => {
+    if (commentSignal) setCommentOpen(true);
+  }, [commentSignal]);
+  useEffect(() => {
+    if (reportSignal) setReportOpen(true);
+  }, [reportSignal]);
   const [name, setName] = useState(profile?.full_name ?? "");
   const [body, setBody] = useState("");
   const [reason, setReason] = useState(REPORT_REASONS[0] ?? "");
