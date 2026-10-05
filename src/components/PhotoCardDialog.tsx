@@ -139,7 +139,7 @@ function PhotoCardDialog({ news, onClose }: { news: PhotoCardNews; onClose: () =
 
   const download = async () => {
     const blob = await toBlob();
-    if (!blob) return toast.error("ফটোকার্ড তৈরি করা যায়নি");
+    if (!blob) { toast.error("ফটোকার্ড তৈরি করা যায়নি"); return; }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `photocard-${news.slug}.png`;
@@ -149,7 +149,7 @@ function PhotoCardDialog({ news, onClose }: { news: PhotoCardNews; onClose: () =
 
   const share = async () => {
     const blob = await toBlob();
-    if (!blob) return toast.error("ফটোকার্ড তৈরি করা যায়নি");
+    if (!blob) { toast.error("ফটোকার্ড তৈরি করা যায়নি"); return; }
     const file = new File([blob], `photocard-${news.slug}.png`, { type: "image/png" });
     const url = `${window.location.origin}/news/${news.slug}`;
     if (navigator.canShare?.({ files: [file] })) {
