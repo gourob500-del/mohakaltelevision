@@ -37,7 +37,7 @@ function AdminNewsReview() {
   const navigate = useNavigate();
   const [note, setNote] = useState("");
   const [form, setForm] = useState<Record<string, string>>({});
-  const [flags, setFlags] = useState({ is_top: false, is_breaking: false });
+  const [flags, setFlags] = useState({ is_top: false, is_breaking: false, epaper_exclude: false });
 
   const { data: news, isLoading } = useQuery({
     queryKey: ["admin-news-item", id],
@@ -77,7 +77,7 @@ function AdminNewsReview() {
       district_id: news.district_id ?? "",
       upazila_id: news.upazila_id ?? "",
     });
-    setFlags({ is_top: news.is_top, is_breaking: news.is_breaking });
+    setFlags({ is_top: news.is_top, is_breaking: news.is_breaking, epaper_exclude: !!(news as { epaper_exclude?: boolean }).epaper_exclude });
     setNote(news.review_note ?? "");
   }, [news]);
 
@@ -107,6 +107,7 @@ function AdminNewsReview() {
         upazila_id: form['upazila_id'] || null,
         is_top: flags.is_top,
         is_breaking: flags.is_breaking,
+        epaper_exclude: flags.epaper_exclude,
       }),
     onSuccess: () => {
       toast.success("সংবাদ সংরক্ষিত হয়েছে");
@@ -305,6 +306,14 @@ function AdminNewsReview() {
                     onChange={(e) => setFlags((f) => ({ ...f, is_breaking: e.target.checked }))}
                   />
                   ব্রেকিং নিউজ
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={flags.epaper_exclude}
+                    onChange={(e) => setFlags((f) => ({ ...f, epaper_exclude: e.target.checked }))}
+                  />
+                  ই-পেপারে নয়
                 </label>
               </div>
 

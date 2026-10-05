@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { NewsCard } from "@/components/NewsCard";
 import { BreakingTicker } from "@/components/BreakingTicker";
+import { AdSlot } from "@/components/AdSlot";
 import { fetchHomeFeed, type NewsRow } from "@/lib/queries";
 
 export const Route = createFileRoute("/")({
@@ -96,6 +97,7 @@ function Home() {
           </div>
 
           <aside>
+            <AdSlot placement="sidebar" className="mb-6" />
             {top?.length ? (
               <section className="mb-6">
                 <SectionTitle>শীর্ষ সংবাদ</SectionTitle>

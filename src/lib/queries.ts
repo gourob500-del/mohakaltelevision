@@ -4,7 +4,7 @@ import { getPublicWebsiteSettings } from "@/lib/settings.functions";
 export const NEWS_SELECT = `
   id, slug, title, summary, featured_image, caption, video_url, source,
   reporter_name, reporter_designation, location, status, views, published_at, created_at, updated_at,
-  review_note, author_id, is_top, is_breaking, content, images,
+  review_note, author_id, is_top, is_breaking, epaper_exclude, content, images,
   category:categories(id, name, slug),
   division:divisions(id, name, slug),
   district:districts(id, name, slug),
@@ -33,6 +33,7 @@ export type NewsRow = {
   author_id: string;
   is_top: boolean;
   is_breaking: boolean;
+  epaper_exclude?: boolean;
   content: string;
   category: { id: string; name: string; slug: string } | null;
   division: { id: string; name: string; slug: string } | null;
@@ -233,4 +234,18 @@ export async function fetchHomeFeed(limit = 200): Promise<HomeFeed> {
     district: all.filter((n) => !!n.district).slice(0, 8),
     byCategory,
   };
+}
+
+/** Published news for one Dhaka calendar day (YYYY-MM-DD), excluding items opted out of the e-paper. */
+export async function fetchEpaperNews(date: string) {
+  const start = new Date(`${date}T00:00:00+06:00`).toISOString();
+  const end = new Date(`${date}T23:59:59.999+06:00`).toISOString();
+  const { data, error } = await published()
+    .eq("epaper_exclude", false)
+    .gte("published_at", start)
+    .lte("published_at", end)
+    .limit(60);
+  if (error) throw error;
+  const rows = (data ?? []) as unknown as NewsRow[];
+  return [...rows.filter((n) => n.is_top), ...rows.filter((n) => !n.is_top)];
 }

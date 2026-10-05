@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { PenSquare } from "lucide-react";
 import { DashboardShell } from "@/components/DashboardShell";
+import { PhotoCardButton } from "@/components/PhotoCardDialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { REP_NAV } from "@/lib/rep-nav";
@@ -94,6 +95,14 @@ function MyNewsPage() {
                   {r.category?.name ?? "—"} · {formatBnDate(r.published_at ?? r.created_at)} ·{" "}
                   {toBn(r.views)} পাঠক
                 </span>
+                {r.status === "PUBLISHED" ? (
+                  <div className="flex w-full flex-wrap gap-2">
+                    <PhotoCardButton news={r} />
+                    <Button asChild size="sm" variant="ghost">
+                      <Link to="/news/$slug" params={{ slug: r.slug }}>সংবাদ দেখুন</Link>
+                    </Button>
+                  </div>
+                ) : null}
                 {r.review_note ? (
                   <p className="w-full text-xs text-destructive">রিভিউ মন্তব্য: {r.review_note}</p>
                 ) : null}
