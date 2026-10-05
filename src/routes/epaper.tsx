@@ -14,7 +14,7 @@ function dhakaToday() {
 
 export const Route = createFileRoute("/epaper")({
   validateSearch: (s: Record<string, unknown>) => ({
-    date: typeof s.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.date) ? s.date : undefined,
+    date: typeof s["date"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s["date"]) ? (s["date"] as string) : undefined,
   }),
   head: () => ({
     meta: [

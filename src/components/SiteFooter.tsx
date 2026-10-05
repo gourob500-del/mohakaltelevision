@@ -151,7 +151,7 @@ export function SiteFooter() {
               <Link to="/latest" className="hover:text-primary">
                 সর্বশেষ সংবাদ
               </Link>
-              <Link to="/epaper" className="hover:text-primary">
+              <Link to="/epaper" search={{ date: undefined }} className="hover:text-primary">
                 ই-পেপার
               </Link>
             </li>

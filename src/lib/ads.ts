@@ -40,7 +40,9 @@ export async function fetchAllAds() {
 
 export async function saveAd(ad: Partial<Ad> & { title: string; image_url: string }) {
   const { data: u } = await supabase.auth.getUser();
-  const payload = { ...ad, created_by: ad.id ? undefined : u.user?.id };
+  const { id: _id, ...rest } = ad;
+  void _id;
+  const payload = ad.id ? rest : { ...rest, created_by: u.user?.id ?? null };
   const { error } = ad.id
     ? await supabase.from("ads").update(payload).eq("id", ad.id)
     : await supabase.from("ads").insert(payload);
