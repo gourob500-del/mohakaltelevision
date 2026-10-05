@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DistrictRouteImport } from './routes/district'
+import { Route as EpaperRouteImport } from './routes/epaper'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAdsRouteImport } from './routes/admin.ads'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminLocationsRouteImport } from './routes/admin.locations'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
@@ -57,6 +59,11 @@ const DistrictRoute = DistrictRouteImport.update({
   path: '/district',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EpaperRoute = EpaperRouteImport.update({
+  id: '/epaper',
+  path: '/epaper',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LatestRoute = LatestRouteImport.update({
   id: '/latest',
   path: '/latest',
@@ -70,6 +77,11 @@ const SearchRoute = SearchRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAdsRoute = AdminAdsRouteImport.update({
+  id: '/admin/ads',
+  path: '/admin/ads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
@@ -178,8 +190,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/district': typeof DistrictRoute
+  '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -207,8 +221,10 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/district': typeof DistrictRoute
+  '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -237,8 +253,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/district': typeof DistrictRoute
+  '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -268,8 +286,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/district'
+    | '/epaper'
     | '/latest'
     | '/search'
+    | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
@@ -297,8 +317,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/district'
+    | '/epaper'
     | '/latest'
     | '/search'
+    | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
@@ -326,8 +348,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/district'
+    | '/epaper'
     | '/latest'
     | '/search'
+    | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
     | '/admin/login'
@@ -356,8 +380,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   DistrictRoute: typeof DistrictRoute
+  EpaperRoute: typeof EpaperRoute
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
+  AdminAdsRoute: typeof AdminAdsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -411,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DistrictRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/epaper': {
+      id: '/epaper'
+      path: '/epaper'
+      fullPath: '/epaper'
+      preLoaderRoute: typeof EpaperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/latest': {
       id: '/latest'
       path: '/latest'
@@ -430,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/ads': {
+      id: '/admin/ads'
+      path: '/admin/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AdminAdsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/categories': {
@@ -580,8 +620,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   DistrictRoute: DistrictRoute,
+  EpaperRoute: EpaperRoute,
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
+  AdminAdsRoute: AdminAdsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
   AdminLoginRoute: AdminLoginRoute,
