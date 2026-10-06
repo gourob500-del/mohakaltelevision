@@ -9,7 +9,6 @@ import { NewsActionBar } from "@/components/NewsActionBar";
 import { NewsEngagement } from "@/components/NewsEngagement";
 import { PhotoCardButton } from "@/components/PhotoCardDialog";
 import { AdSlot } from "@/components/AdSlot";
-import { useAuth } from "@/hooks/useAuth";
 import { NEWS_SELECT, fetchAdjacentNews, fetchNewsBySlug, type NewsRow } from "@/lib/queries";
 import { formatBnDate, toBn } from "@/lib/mtv";
 
@@ -55,7 +54,6 @@ function NewsDetail() {
   const { slug } = Route.useParams();
   const initial = Route.useLoaderData();
   const queryClient = useQueryClient();
-  const { user, isAdmin } = useAuth();
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState(18);
   const [commentSignal, setCommentSignal] = useState(0);
@@ -210,11 +208,9 @@ function NewsDetail() {
           onReport={() => setReportSignal((n) => n + 1)}
         />
 
-        {user && (isAdmin || user.id === news.author_id) ? (
-          <div className="no-print -mt-2 mb-4">
-            <PhotoCardButton news={news} />
-          </div>
-        ) : null}
+        <div className="no-print -mt-2 mb-4">
+          <PhotoCardButton news={news} />
+        </div>
 
         {news.featured_image ? (
           <figure className="mt-4">

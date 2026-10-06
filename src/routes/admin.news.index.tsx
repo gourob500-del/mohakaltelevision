@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell, EmptyState, useAdminReady } from "@/components/AdminShell";
 import { Button } from "@/components/ui/button";
+import { PhotoCardButton } from "@/components/PhotoCardDialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -202,6 +203,7 @@ function AdminNews() {
                   {formatBnDate(r.created_at)} • পাঠক {toBn(r.views)}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
+                  {r.status === "PUBLISHED" ? <PhotoCardButton news={r} /> : null}
                   <Button size="sm" variant="outline" asChild>
                     <Link to="/admin/news/$id" params={{ id: r.id }}>
                       দেখুন / সম্পাদনা

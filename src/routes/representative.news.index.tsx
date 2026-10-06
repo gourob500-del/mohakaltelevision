@@ -50,7 +50,10 @@ function MyNewsPage() {
   const { data: rows = [], isLoading } = useQuery({
     queryKey: ["my-news", userId, status],
     enabled: !!userId,
-    queryFn: () => fetchMyNews(userId!, status),
+    queryFn: () => {
+      if (!userId) return Promise.resolve([]);
+      return fetchMyNews(userId, status);
+    },
   });
 
   return (
