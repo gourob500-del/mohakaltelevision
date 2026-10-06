@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Eye, MapPin, User } from "lucide-react";
 import type { NewsRow } from "@/lib/queries";
 import { formatBnDate, toBn } from "@/lib/mtv";
+import { PhotoCardButton } from "@/components/PhotoCardDialog";
 
 type Props = { news: NewsRow; variant?: "default" | "lead" | "row" };
 
@@ -10,10 +11,11 @@ export function NewsCard({ news, variant = "default" }: Props) {
 
   if (variant === "row") {
     return (
+      <div className="border-b border-border py-3 last:border-0">
       <Link
         to="/news/$slug"
         params={{ slug: news.slug }}
-        className="group flex gap-3 border-b border-border py-3 last:border-0"
+        className="group flex gap-3"
       >
         <div className="h-16 w-24 shrink-0 overflow-hidden rounded bg-muted">
           {news.featured_image ? (
@@ -34,17 +36,16 @@ export function NewsCard({ news, variant = "default" }: Props) {
           </p>
         </div>
       </Link>
+      <div className="mt-2"><PhotoCardButton news={news} /></div>
+      </div>
     );
   }
 
   const lead = variant === "lead";
 
   return (
-    <Link
-      to="/news/$slug"
-      params={{ slug: news.slug }}
-      className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-colors hover:border-primary/40"
-    >
+    <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-colors hover:border-primary/40">
+    <Link to="/news/$slug" params={{ slug: news.slug }} className="group flex flex-1 flex-col">
       <div
         className={`relative w-full overflow-hidden bg-muted ${lead ? "aspect-[16/9]" : "aspect-[4/3]"}`}
       >
@@ -96,5 +97,7 @@ export function NewsCard({ news, variant = "default" }: Props) {
         </div>
       </div>
     </Link>
+    <div className="px-3 pb-3"><PhotoCardButton news={news} /></div>
+    </div>
   );
 }
