@@ -168,13 +168,16 @@ export type MyNewsRow = {
   views: number;
   created_at: string;
   published_at: string | null;
+  featured_image: string | null;
+  reporter_name: string | null;
+  reporter_designation: string | null;
   review_note: string | null;
   category: { name: string } | null;
   district: { name: string } | null;
 };
 
 const MY_NEWS_SELECT =
-  "id, title, slug, status, views, created_at, published_at, review_note, category:categories(name), district:districts(name)";
+  "id, title, slug, status, views, created_at, published_at, featured_image, reporter_name, reporter_designation, review_note, category:categories(name), district:districts(name)";
 
 /** Representative-scoped list: RLS plus an explicit author filter. */
 export async function fetchMyNews(authorId: string, status?: NewsStatus | "ALL") {
