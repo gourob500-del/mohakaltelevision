@@ -4,7 +4,7 @@ import type { NewsStatus } from "@/lib/mtv";
 
 export const ADMIN_NEWS_SELECT = `
   id, slug, title, summary, content, featured_image, caption, video_url, source,
-  reporter_name, location, status, views, published_at, created_at, updated_at,
+  reporter_name, reporter_designation, location, status, views, published_at, created_at, updated_at,
   review_note, author_id, is_top, is_breaking,
   category_id, division_id, district_id, upazila_id,
   category:categories(id, name), division:divisions(id, name),
@@ -22,6 +22,7 @@ export type AdminNewsRow = {
   video_url: string | null;
   source: string | null;
   reporter_name: string | null;
+  reporter_designation: string | null;
   location: string | null;
   status: NewsStatus;
   views: number;
