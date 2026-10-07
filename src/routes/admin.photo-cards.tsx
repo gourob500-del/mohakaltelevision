@@ -149,16 +149,16 @@ function Editor({ initial, sample, onClose, onSaved }: { initial: PhotoCardTempl
   const [busy, setBusy] = useState(false);
   const set = <K extends keyof PhotoCardTemplate>(k: K, v: PhotoCardTemplate[K]) => setT((p) => ({ ...p, [k]: v }));
   const setEl = (i: number, patch: Partial<TemplateElement>) => setT((p) => ({ ...p, elements: p.elements.map((e, j) => (j === i ? { ...e, ...patch } : e)) }));
-  const move = (i: number, d: number) => setT((p) => { const a = [...p.elements]; const j = i + d; if (j < 0 || j >= a.length) return p; [a[i], a[j]] = [a[j], a[i]]; return { ...p, elements: a }; });
+  const move = (i: number, d: number) => setT((p) => { const a = [...p.elements]; const j = i + d; if (j < 0 || j >= a.length) return p; [a[i], a[j]] = [a[j]!, a[i]!]; return { ...p, elements: a }; });
   const add = (el: TemplateElement) => setT((p) => ({ ...p, elements: [...p.elements, el] }));
 
   const save = async () => {
-    if (!t.name.trim()) return toast.error("টেমপ্লেটের নাম দিন");
+    if (!t.name.trim()) { toast.error("টেমপ্লেটের নাম দিন"); return; }
     setBusy(true);
     const payload = { name: t.name.trim(), width: t.width, height: t.height, background_color: t.background_color, background_url: t.background_url, elements: t.elements, ad_image_url: t.ad_image_url, ad_text: t.ad_text };
     const { error } = t.id ? await db.from("photo_card_templates").update(payload).eq("id", t.id) : await db.from("photo_card_templates").insert(payload);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("টেমপ্লেট সংরক্ষিত হয়েছে"); onSaved();
   };
 

@@ -32,16 +32,16 @@ export type PhotoCardField = (typeof PHOTO_CARD_FIELDS)[number]["key"];
 
 export type TemplateElement = {
   type: "rect" | "text" | "field";
-  field?: PhotoCardField;
-  text?: string;
+  field?: PhotoCardField | undefined;
+  text?: string | undefined;
   x: number; y: number; w: number; h: number;
-  color?: string;
-  size?: number;
-  bold?: boolean;
-  align?: "left" | "center" | "right";
-  fit?: "contain" | "cover";
-  opacity?: number;
-  border?: string;
+  color?: string | undefined;
+  size?: number | undefined;
+  bold?: boolean | undefined;
+  align?: "left" | "center" | "right" | undefined;
+  fit?: "contain" | "cover" | undefined;
+  opacity?: number | undefined;
+  border?: string | undefined;
 };
 
 export type PhotoCardTemplate = {
@@ -189,7 +189,7 @@ export async function renderPhotoCard(news: PhotoCardNews, settings: PublicWebsi
     tpl.background_url ? loadImage(tpl.background_url) : Promise.resolve(null),
     ...(["logo", "news_image", "advertisement"] as const).map((k) => uses(k) && imgSrc[k] ? loadImage(imgSrc[k]!) : Promise.resolve(null)),
   ]);
-  const images: Record<string, HTMLImageElement | null> = { logo: imgs[0], news_image: imgs[1], advertisement: imgs[2] };
+  const images: Record<string, HTMLImageElement | null> = { logo: imgs[0] ?? null, news_image: imgs[1] ?? null, advertisement: imgs[2] ?? null };
 
   const canvas = document.createElement("canvas");
   canvas.width = tpl.width || PHOTO_CARD_SIZE;
