@@ -24,6 +24,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminLogsRouteImport } from './routes/admin.logs'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminModerationRouteImport } from './routes/admin.moderation'
+import { Route as AdminPhotoCardsRouteImport } from './routes/admin.photo-cards'
 import { Route as AdminRepresentativesRouteImport } from './routes/admin.representatives'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -114,6 +115,11 @@ const AdminModerationRoute = AdminModerationRouteImport.update({
   path: '/admin/moderation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPhotoCardsRoute = AdminPhotoCardsRouteImport.update({
+  id: '/admin/photo-cards',
+  path: '/admin/photo-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRepresentativesRoute = AdminRepresentativesRouteImport.update({
   id: '/admin/representatives',
   path: '/admin/representatives',
@@ -200,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/moderation': typeof AdminModerationRoute
+  '/admin/photo-cards': typeof AdminPhotoCardsRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/moderation': typeof AdminModerationRoute
+  '/admin/photo-cards': typeof AdminPhotoCardsRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/admin/logs': typeof AdminLogsRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/moderation': typeof AdminModerationRoute
+  '/admin/photo-cards': typeof AdminPhotoCardsRoute
   '/admin/representatives': typeof AdminRepresentativesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/admin/logs'
     | '/admin/media'
     | '/admin/moderation'
+    | '/admin/photo-cards'
     | '/admin/representatives'
     | '/admin/settings'
     | '/admin/users'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin/logs'
     | '/admin/media'
     | '/admin/moderation'
+    | '/admin/photo-cards'
     | '/admin/representatives'
     | '/admin/settings'
     | '/admin/users'
@@ -358,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/logs'
     | '/admin/media'
     | '/admin/moderation'
+    | '/admin/photo-cards'
     | '/admin/representatives'
     | '/admin/settings'
     | '/admin/users'
@@ -390,6 +402,7 @@ export interface RootRouteChildren {
   AdminLogsRoute: typeof AdminLogsRoute
   AdminMediaRoute: typeof AdminMediaRoute
   AdminModerationRoute: typeof AdminModerationRoute
+  AdminPhotoCardsRoute: typeof AdminPhotoCardsRoute
   AdminRepresentativesRoute: typeof AdminRepresentativesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -514,6 +527,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminModerationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/photo-cards': {
+      id: '/admin/photo-cards'
+      path: '/admin/photo-cards'
+      fullPath: '/admin/photo-cards'
+      preLoaderRoute: typeof AdminPhotoCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/representatives': {
       id: '/admin/representatives'
       path: '/admin/representatives'
@@ -630,6 +650,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLogsRoute: AdminLogsRoute,
   AdminMediaRoute: AdminMediaRoute,
   AdminModerationRoute: AdminModerationRoute,
+  AdminPhotoCardsRoute: AdminPhotoCardsRoute,
   AdminRepresentativesRoute: AdminRepresentativesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
