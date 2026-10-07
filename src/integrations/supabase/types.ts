@@ -460,6 +460,57 @@ export type Database = {
         }
         Relationships: []
       }
+      photo_card_templates: {
+        Row: {
+          ad_image_url: string | null
+          ad_text: string | null
+          background_color: string
+          background_url: string | null
+          created_at: string
+          created_by: string | null
+          elements: Json
+          height: number
+          id: string
+          is_active: boolean
+          is_builtin: boolean
+          name: string
+          updated_at: string
+          width: number
+        }
+        Insert: {
+          ad_image_url?: string | null
+          ad_text?: string | null
+          background_color?: string
+          background_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          elements?: Json
+          height?: number
+          id?: string
+          is_active?: boolean
+          is_builtin?: boolean
+          name: string
+          updated_at?: string
+          width?: number
+        }
+        Update: {
+          ad_image_url?: string | null
+          ad_text?: string | null
+          background_color?: string
+          background_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          elements?: Json
+          height?: number
+          id?: string
+          is_active?: boolean
+          is_builtin?: boolean
+          name?: string
+          updated_at?: string
+          width?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           can_publish: boolean
@@ -683,6 +734,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_photo_card_template: {
+        Args: { _id: string }
+        Returns: undefined
+      }
       can_publish: { Args: { _user_id: string }; Returns: boolean }
       has_permission: {
         Args: { _module: string; _user_id: string }
