@@ -23,6 +23,7 @@ export const ADMIN_NAV: NavItem[] = [
   { label: "বিভাগ (ক্যাটাগরি)", to: "/admin/categories", icon: FolderTree },
   { label: "জেলা ও উপজেলা", to: "/admin/locations", icon: MapPin },
   { label: "মিডিয়া লাইব্রেরি", to: "/admin/media", icon: Image },
+  { label: "ফটোকার্ড টেমপ্লেট", to: "/admin/photo-cards", icon: Image },
   { label: "বিজ্ঞাপন", to: "/admin/ads", icon: Megaphone },
   { label: "ওয়েবসাইট সেটিংস", to: "/admin/settings", icon: Settings },
   { label: "অ্যাডমিন ও অনুমতি", to: "/admin/users", icon: ShieldCheck },
