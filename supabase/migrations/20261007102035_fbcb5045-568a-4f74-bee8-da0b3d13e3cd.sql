@@ -1,0 +1,1 @@
+ALTER FUNCTION public.activate_photo_card_template(uuid) SECURITY INVOKER;
