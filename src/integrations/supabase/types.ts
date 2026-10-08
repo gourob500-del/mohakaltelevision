@@ -235,6 +235,21 @@ export type Database = {
         }
         Relationships: []
       }
+      epaper_cron_key: {
+        Row: {
+          id: number
+          token: string
+        }
+        Insert: {
+          id?: number
+          token?: string
+        }
+        Update: {
+          id?: number
+          token?: string
+        }
+        Relationships: []
+      }
       epaper_issues: {
         Row: {
           created_at: string
