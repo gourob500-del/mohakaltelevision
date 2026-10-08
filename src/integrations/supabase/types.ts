@@ -181,6 +181,201 @@ export type Database = {
         }
         Relationships: []
       }
+      epaper_ads: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          ends_on: string | null
+          id: string
+          image_url: string
+          is_active: boolean
+          link_url: string | null
+          organization: string | null
+          pages: number[]
+          position: string
+          size: string
+          sort_order: number
+          starts_on: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          ends_on?: string | null
+          id?: string
+          image_url: string
+          is_active?: boolean
+          link_url?: string | null
+          organization?: string | null
+          pages?: number[]
+          position?: string
+          size?: string
+          sort_order?: number
+          starts_on?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          ends_on?: string | null
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          link_url?: string | null
+          organization?: string | null
+          pages?: number[]
+          position?: string
+          size?: string
+          sort_order?: number
+          starts_on?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      epaper_cron_key: {
+        Row: {
+          id: number
+          token: string
+        }
+        Insert: {
+          id?: number
+          token?: string
+        }
+        Update: {
+          id?: number
+          token?: string
+        }
+        Relationships: []
+      }
+      epaper_issues: {
+        Row: {
+          created_at: string
+          generated_at: string
+          id: string
+          issue_date: string
+          news_count: number
+          overrides: Json
+          page_count: number
+          pages: Json
+          source_date: string
+          status: string
+          template: Json
+        }
+        Insert: {
+          created_at?: string
+          generated_at?: string
+          id?: string
+          issue_date: string
+          news_count?: number
+          overrides?: Json
+          page_count?: number
+          pages?: Json
+          source_date: string
+          status?: string
+          template?: Json
+        }
+        Update: {
+          created_at?: string
+          generated_at?: string
+          id?: string
+          issue_date?: string
+          news_count?: number
+          overrides?: Json
+          page_count?: number
+          pages?: Json
+          source_date?: string
+          status?: string
+          template?: Json
+        }
+        Relationships: []
+      }
+      epaper_runs: {
+        Row: {
+          created_at: string
+          id: string
+          issue_date: string
+          message: string | null
+          news_count: number | null
+          page_count: number | null
+          status: string
+          trigger: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          issue_date: string
+          message?: string | null
+          news_count?: number | null
+          page_count?: number | null
+          status: string
+          trigger: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          issue_date?: string
+          message?: string | null
+          news_count?: number | null
+          page_count?: number | null
+          status?: string
+          trigger?: string
+        }
+        Relationships: []
+      }
+      epaper_settings: {
+        Row: {
+          automation_enabled: boolean
+          id: number
+          logo_url: string | null
+          page_categories: Json
+          updated_at: string
+        }
+        Insert: {
+          automation_enabled?: boolean
+          id?: number
+          logo_url?: string | null
+          page_categories?: Json
+          updated_at?: string
+        }
+        Update: {
+          automation_enabled?: boolean
+          id?: number
+          logo_url?: string | null
+          page_categories?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      epaper_templates: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       media: {
         Row: {
           created_at: string
