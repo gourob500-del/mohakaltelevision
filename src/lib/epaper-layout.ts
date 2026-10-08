@@ -224,10 +224,10 @@ export function buildLayout(input: LayoutInput): LayoutResult {
         const cost = AD_UNITS[ad.size];
         // Ads may use at most half of a page so news is never pushed out entirely.
         const cap = Math.floor((template.capacity[String(p)] ?? 8) / 2);
-        const used = pageAds[p].reduce((s, a) => s + AD_UNITS[a.size], 0);
+        const used = pageAds[p]!.reduce((s, a) => s + AD_UNITS[a.size], 0);
         if (used + cost > cap) continue;
-        pageAds[p].push(placement);
-        remaining[p] -= cost;
+        pageAds[p]!.push(placement);
+        remaining[p] = remaining[p]! - cost;
       }
     }
   }
@@ -244,12 +244,12 @@ export function buildLayout(input: LayoutInput): LayoutResult {
   const items: Record<number, EpaperItem[]> = { 1: [], 2: [], 3: [], 4: [] };
   const place = (p: number, n: EpaperNewsInput): boolean => {
     if (fullAdPages.has(p)) return false;
-    const first = items[p].length === 0;
+    const first = items[p]!.length === 0;
     const sizes: ItemSize[] = first ? ["lead", "medium", "small"] : ["medium", "small"];
     for (const s of sizes) {
-      if (SIZE_UNITS[s] <= remaining[p]) {
-        items[p].push(toItem(n, s));
-        remaining[p] -= SIZE_UNITS[s];
+      if (SIZE_UNITS[s] <= remaining[p]!) {
+        items[p]!.push(toItem(n, s));
+        remaining[p] = remaining[p]! - SIZE_UNITS[s];
         return true;
       }
     }
@@ -275,9 +275,9 @@ export function buildLayout(input: LayoutInput): LayoutResult {
   const kinds: EpaperPageData["kind"][] = ["front", "general", "local", "ads"];
   const pages: EpaperPageData[] = [];
   for (let p = 1; p <= MAX_PAGES; p++) {
-    if (items[p].length === 0 && pageAds[p].length === 0) continue; // no empty pages
-    if (p === 1 && items[p].length === 0) continue;
-    pages.push({ number: 0, title: PAGE_TITLES[p]!, kind: kinds[p - 1]!, items: items[p], ads: pageAds[p] });
+    if (items[p]!.length === 0 && pageAds[p]!.length === 0) continue; // no empty pages
+    if (p === 1 && items[p]!.length === 0) continue;
+    pages.push({ number: 0, title: PAGE_TITLES[p]!, kind: kinds[p - 1]!, items: items[p]!, ads: pageAds[p]! });
   }
   // A page of ads only is kept only when there is real news in the issue.
   const hasNews = pages.some((pg) => pg.items.length > 0);
