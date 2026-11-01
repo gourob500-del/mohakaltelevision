@@ -36,6 +36,7 @@ import { Route as RepresentativeRegisterRouteImport } from './routes/representat
 import { Route as AdminNewsIndexRouteImport } from './routes/admin.news.index'
 import { Route as AdminNewsIdRouteImport } from './routes/admin.news.$id'
 import { Route as AdminNewsNewRouteImport } from './routes/admin.news.new'
+import { Route as ApiPublicEpaperGenerateRouteImport } from './routes/api/public/epaper-generate'
 import { Route as RepresentativeNewsIndexRouteImport } from './routes/representative.news.index'
 import { Route as RepresentativeNewsNewRouteImport } from './routes/representative.news.new'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
@@ -175,6 +176,11 @@ const AdminNewsNewRoute = AdminNewsNewRouteImport.update({
   path: '/admin/news/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEpaperGenerateRoute = ApiPublicEpaperGenerateRouteImport.update({
+  id: '/api/public/epaper-generate',
+  path: '/api/public/epaper-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RepresentativeNewsIndexRoute = RepresentativeNewsIndexRouteImport.update({
   id: '/representative/news/',
   path: '/representative/news/',
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/representative/': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
   '/admin/news/new': typeof AdminNewsNewRoute
+  '/api/public/epaper-generate': typeof ApiPublicEpaperGenerateRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
   '/representative/news/': typeof RepresentativeNewsIndexRoute
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/representative': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
   '/admin/news/new': typeof AdminNewsNewRoute
+  '/api/public/epaper-generate': typeof ApiPublicEpaperGenerateRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news': typeof AdminNewsIndexRoute
   '/representative/news': typeof RepresentativeNewsIndexRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/representative/': typeof RepresentativeIndexRoute
   '/admin/news/$id': typeof AdminNewsIdRoute
   '/admin/news/new': typeof AdminNewsNewRoute
+  '/api/public/epaper-generate': typeof ApiPublicEpaperGenerateRoute
   '/representative/news/new': typeof RepresentativeNewsNewRoute
   '/admin/news/': typeof AdminNewsIndexRoute
   '/representative/news/': typeof RepresentativeNewsIndexRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/representative/'
     | '/admin/news/$id'
     | '/admin/news/new'
+    | '/api/public/epaper-generate'
     | '/representative/news/new'
     | '/admin/news/'
     | '/representative/news/'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/representative'
     | '/admin/news/$id'
     | '/admin/news/new'
+    | '/api/public/epaper-generate'
     | '/representative/news/new'
     | '/admin/news'
     | '/representative/news'
@@ -381,6 +392,7 @@ export interface FileRouteTypes {
     | '/representative/'
     | '/admin/news/$id'
     | '/admin/news/new'
+    | '/api/public/epaper-generate'
     | '/representative/news/new'
     | '/admin/news/'
     | '/representative/news/'
@@ -414,6 +426,7 @@ export interface RootRouteChildren {
   RepresentativeIndexRoute: typeof RepresentativeIndexRoute
   AdminNewsIdRoute: typeof AdminNewsIdRoute
   AdminNewsNewRoute: typeof AdminNewsNewRoute
+  ApiPublicEpaperGenerateRoute: typeof ApiPublicEpaperGenerateRoute
   RepresentativeNewsNewRoute: typeof RepresentativeNewsNewRoute
   AdminNewsIndexRoute: typeof AdminNewsIndexRoute
   RepresentativeNewsIndexRoute: typeof RepresentativeNewsIndexRoute
@@ -611,6 +624,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/epaper-generate': {
+      id: '/api/public/epaper-generate'
+      path: '/api/public/epaper-generate'
+      fullPath: '/api/public/epaper-generate'
+      preLoaderRoute: typeof ApiPublicEpaperGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/representative/news/': {
       id: '/representative/news/'
       path: '/representative/news'
@@ -662,6 +682,7 @@ const rootRouteChildren: RootRouteChildren = {
   RepresentativeIndexRoute: RepresentativeIndexRoute,
   AdminNewsIdRoute: AdminNewsIdRoute,
   AdminNewsNewRoute: AdminNewsNewRoute,
+  ApiPublicEpaperGenerateRoute: ApiPublicEpaperGenerateRoute,
   RepresentativeNewsNewRoute: RepresentativeNewsNewRoute,
   AdminNewsIndexRoute: AdminNewsIndexRoute,
   RepresentativeNewsIndexRoute: RepresentativeNewsIndexRoute,

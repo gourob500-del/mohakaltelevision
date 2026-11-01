@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { timingSafeEqual } from "node:crypto";
-import { dhakaDate } from "@/lib/epaper-layout";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 /** Daily automation entry point. Called by pg_cron at 00:10 Asia/Dhaka. */
 export const Route = createFileRoute("/api/public/epaper-generate")({
@@ -32,22 +31,9 @@ export const Route = createFileRoute("/api/public/epaper-generate")({
   },
 });
 
-/** Constant-time token comparison; length mismatches still take the same branch shape. */
+/** Constant-time token comparison. */
 function sameToken(a: string, b: string): boolean {
-  const ha = sha256(a);
-  const hb = sha256(b);
-  return ha.length === hb.length && timingSafeEqual(Buffer.from(ha), Buffer.from(hb));
+  const ha = createHash("sha256").update(a).digest();
+  const hb = createHash("sha256").update(b).digest();
+  return ha.length === hb.length && timingSafeEqual(ha, hb);
 }
-
-function sha256(value: string): string {
-  return createHashHex(value);
-}
-
-function createHashHex(value: string): string {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createHash } = require("node:crypto") as typeof import("node:crypto");
-  return createHash("sha256").update(value).digest("hex");
-}
-
-// dhakaDate re-exported indirectly through the engine; keep the import used.
-void dhakaDate;
