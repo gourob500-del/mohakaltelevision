@@ -1,15 +1,14 @@
 # MOHAKAL TELEVISION — বাকি কাজ
 
-- [x] প্রতিনিধি নিউজ সাবমিশন (ড্যাশবোর্ড, অটো-ফিল, আমার সংবাদ)
-- [x] অ্যাডমিন ইউজার ও কাস্টম পারমিশন UI (/admin/users)
-- [x] অ্যাক্টিভিটি লগ পেজ (/admin/logs)
-- [x] ওয়াটারমার্ক কন্ট্রোল (Website Settings)
-- [x] নিউজ Action Bar (share, copy, print/PDF, bookmark, font +/-, read aloud)
-- [x] কমেন্ট ও রিপোর্ট (পাবলিক ফর্ম + অ্যাডমিন মডারেশন)
-- [x] Previous / Next / Related news
+- [x] প্রতিনিধি নিউজ সাবমিশন, অ্যাডমিন প্যানেল, লগ, ওয়াটারমার্ক, অ্যাকশন বার, কমেন্ট/রিপোর্ট
+- [x] ফটোকার্ড সিস্টেম + টেমপ্লেট লাইব্রেরি (/admin/photo-cards)
+- [x] ই-পেপার ডেটাবেস (epaper_issues/templates/ads/runs/settings) + লেআউট ইঞ্জিন + টেস্ট
 
-## Current scope — Photo Card only
-- [ ] Repair My News image/reporter data selection without database changes.
-- [ ] Complete 1200 × 1200 branded photo card preview, PNG download, regenerate and sharing.
-- [ ] Connect published-news buttons on cards, details, reporter list and admin list.
-- [ ] Verify photo card workflow on mobile, tablet and desktop.
+## ই-পেপার — চলমান
+- [ ] সার্ভার-সাইড জেনারেশন ইঞ্জিন (সংবাদ নির্বাচন, ৪ পৃষ্ঠা, আপসার্ট, রান লগ)
+- [ ] ক্রোন রুট /api/public/epaper-generate (টোকেন যাচাই) + pg_cron শিডিউল (০০:১০ ঢাকা)
+- [ ] পাঠকের ভিউয়ার /epaper (সংখ্যা, পৃষ্ঠা নেভিগেশন, থাম্বনেইল, জুম, প্রিন্ট/PDF A4-A3, আর্কাইভ)
+- [ ] অ্যাডমিন ড্যাশবোর্ড /admin/epaper (স্ট্যাটাস, এখনই তৈরি, পুনরায় তৈরি, অটোমেশন টগল, সেটিংস, টেমপ্লেট কনফিগ, রান লগ/রিট্রাই)
+- [ ] ই-পেপার বিজ্ঞাপন ম্যানেজার /admin/epaper-ads
+- [ ] SolaimanLipi গ্লোবাল @font-face + প্রিন্ট CSS
+- [ ] বাস্তব পরীক্ষা: জেনারেশন → ভিউয়ার → প্রিন্ট, মোবাইল/ডেস্কটপ
