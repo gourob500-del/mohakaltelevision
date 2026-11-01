@@ -28,7 +28,10 @@ export const runEpaperGeneration = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertEpaperAdmin(context);
     const { generateIssue } = await import("@/lib/epaper-generate");
-    const outcome = await generateIssue({ issueDate: data.issueDate, trigger: "MANUAL" });
+    const outcome = await generateIssue({
+      trigger: "MANUAL",
+      ...(data.issueDate ? { issueDate: data.issueDate } : {}),
+    });
     if (!outcome.ok) throw new Error(outcome.error);
     return outcome;
   });
@@ -46,10 +49,15 @@ export const saveEpaperSettings = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertEpaperAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    if (data.automation_enabled !== undefined) patch.automation_enabled = data.automation_enabled;
-    if (data.logo_url !== undefined) patch.logo_url = data.logo_url || null;
-    if (data.page_categories !== undefined) patch.page_categories = data.page_categories;
+    const patch: {
+      updated_at: string;
+      automation_enabled?: boolean;
+      logo_url?: string | null;
+      page_categories?: Record<string, string[]>;
+    } = { updated_at: new Date().toISOString() };
+    if (data.automation_enabled !== undefined) patch["automation_enabled"] = data.automation_enabled;
+    if (data.logo_url !== undefined) patch["logo_url"] = data.logo_url || null;
+    if (data.page_categories !== undefined) patch["page_categories"] = data.page_categories;
     const { error } = await supabaseAdmin.from("epaper_settings").update(patch).eq("id", 1);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -58,7 +66,7 @@ export const saveEpaperSettings = createServerFn({ method: "POST" })
 const templateSchema = z.object({
   id: z.string().uuid().optional(),
   name: z.string().trim().min(1).max(120),
-  config: z.record(z.string(), z.unknown()),
+  config: z.record(z.string(), z.any()),
 });
 
 /** Creates or updates an e-paper page template. */
