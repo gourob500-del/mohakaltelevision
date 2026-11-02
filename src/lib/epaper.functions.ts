@@ -131,3 +131,93 @@ export const deleteEpaperTemplate = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const adSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().trim().min(1).max(160),
+  organization: z.string().trim().max(160).nullable().optional(),
+  image_url: z.string().trim().min(1).max(2048),
+  link_url: z.string().trim().max(2048).nullable().optional(),
+  starts_on: z.string().regex(DATE_RE).nullable().optional(),
+  ends_on: z.string().regex(DATE_RE).nullable().optional(),
+  position: z.enum(["top", "bottom", "left", "right", "middle", "full"]),
+  size: z.enum(["small", "medium", "large"]),
+  pages: z.array(z.number().int().min(1).max(4)).max(4),
+  is_active: z.boolean(),
+  sort_order: z.number().int().min(0).max(999).optional(),
+});
+
+/** Creates or updates an e-paper advertisement. */
+export const saveEpaperAd = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => adSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertEpaperAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const row = {
+      title: data.title,
+      organization: data.organization || null,
+      image_url: data.image_url,
+      link_url: data.link_url || null,
+      starts_on: data.starts_on || null,
+      ends_on: data.ends_on || null,
+      position: data.position,
+      size: data.size,
+      pages: data.pages,
+      is_active: data.is_active,
+      sort_order: data.sort_order ?? 0,
+      updated_at: new Date().toISOString(),
+    };
+    if (data.id) {
+      const { error } = await supabaseAdmin.from("epaper_ads").update(row).eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { id: data.id };
+    }
+    const { data: created, error } = await supabaseAdmin
+      .from("epaper_ads")
+      .insert({ ...row, created_by: context.userId })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: created.id };
+  });
+
+/** Deletes an e-paper advertisement. */
+export const deleteEpaperAd = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertEpaperAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("epaper_ads").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+const overridesSchema = z.object({
+  issueDate: z.string().regex(DATE_RE),
+  overrides: z.record(z.string().uuid(), z.number().int().min(0).max(4)),
+});
+
+/**
+ * Saves manual news-to-page assignments for an issue and rebuilds it.
+ * 0 = exclude from the e-paper (the news stays on the website).
+ */
+export const saveEpaperOverrides = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => overridesSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertEpaperAdmin(context);
+    const { generateIssue } = await import("@/lib/epaper-generate");
+    const first = await generateIssue({ issueDate: data.issueDate, trigger: "MANUAL" });
+    if (!first.ok) throw new Error(first.error);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("epaper_issues")
+      .update({ overrides: data.overrides })
+      .eq("issue_date", data.issueDate);
+    if (error) throw new Error(error.message);
+    const rebuilt = await generateIssue({ issueDate: data.issueDate, trigger: "MANUAL" });
+    if (!rebuilt.ok) throw new Error(rebuilt.error);
+    return rebuilt;
+  });
