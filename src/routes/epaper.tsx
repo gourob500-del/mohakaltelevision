@@ -1,17 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, ChevronLeft, ChevronRight, Printer, ZoomIn, ZoomOut } from "lucide-react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MAX_PAGES, DEFAULT_PAGE_TITLES_FALLBACK } from "@/lib/epaper-viewer-constants";
-import {
-  DEFAULT_TEMPLATE,
-  type EpaperItem,
-  type EpaperPageData,
-  type TemplateConfig,
-} from "@/lib/epaper-layout";
+import { MAX_PAGES, DEFAULT_TEMPLATE, type EpaperItem, type EpaperPageData, type TemplateConfig } from "@/lib/epaper-layout";
 import {
   addDaysLocal,
   ensureEpaperFont,
@@ -20,12 +14,12 @@ import {
   PAPER_SIZES,
   todayDhaka,
   toBn,
-  type EpaperIssueRow,
   type PaperSize,
 } from "@/lib/epaper-viewer";
 import { formatBnDate } from "@/lib/mtv";
 
 const LOGICAL_WIDTH = 820; // px a page is laid out at on screen
+const MM_PER_PX = 3.7795; // CSS mm unit
 
 export const Route = createFileRoute("/epaper")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -34,7 +28,10 @@ export const Route = createFileRoute("/epaper")({
   head: () => ({
     meta: [
       { title: "ই-পেপার — দৈনিক মহাকাল" },
-      { name: "description", content: "দৈনিক মহাকালের ই-পেপার: প্রতিদিনের প্রকাশিত সংবাদ সংবাদপত্রের মতো সর্বোচ্চ ৪ পৃষ্ঠায়। PDF ডাউনলোড ও প্রিন্ট করুন।" },
+      {
+        name: "description",
+        content: "দৈনিক মহাকালের ই-পেপার: প্রতিদিনের প্রকাশিত সংবাদ সংবাদপত্রের মতো সর্বোচ্চ ৪ পৃষ্ঠায়। PDF ডাউনলোড ও প্রিন্ট করুন।",
+      },
       { property: "og:title", content: "ই-পেপার — দৈনিক মহাকাল" },
       { property: "og:description", content: "প্রতিদিনের প্রকাশিত সংবাদ সংবাদপত্রের মতো ৪ পৃষ্ঠায় পড়ুন, প্রিন্ট বা PDF নিন।" },
       { property: "og:type", content: "website" },
@@ -46,7 +43,7 @@ export const Route = createFileRoute("/epaper")({
 
 /** Falls back to defaults so a malformed stored template can never break the viewer. */
 function safeTemplate(raw: unknown): TemplateConfig & { logo_url?: string | null } {
-  const tpl = { ...(DEFAULT_TEMPLATE as TemplateConfig), logo_url: null as string | null };
+  const tpl: TemplateConfig & { logo_url?: string | null } = { ...DEFAULT_TEMPLATE, logo_url: null };
   if (raw && typeof raw === "object") {
     const r = raw as Partial<TemplateConfig> & { logo_url?: string | null };
     if (r.columns && typeof r.columns === "object") tpl.columns = { ...tpl.columns, ...r.columns };
@@ -64,26 +61,20 @@ function safeTemplate(raw: unknown): TemplateConfig & { logo_url?: string | null
 
 const KIND_COLUMN_KEY: Record<EpaperPageData["kind"], string> = { front: "1", general: "2", local: "3", ads: "4" };
 
-function Byline({ item }: { item: EpaperItem }) {
-  if (!item.byline) return null;
-  return <p className="mt-0.5 text-[0.72em] italic opacity-75">{item.byline}</p>;
-}
+const BN_FONT = '"SolaimanLipi", "Noto Sans Bengali", sans-serif';
 
 function ItemBlock({ item, tpl, zoom, lead }: { item: EpaperItem; tpl: TemplateConfig; zoom: number; lead: boolean }) {
   const headlinePx = (lead ? tpl.headlineSize : Math.round(tpl.headlineSize * 0.55)) * zoom;
   const bodyPx = tpl.bodySize * zoom * (lead ? 1.05 : 0.92);
-  const imageHeight = lead ? 250 * zoom : lead === false && item.image ? 150 * zoom : 0;
+  const imageHeight = item.image ? (lead ? 250 : 150) * zoom : 0;
   return (
     <article className="break-inside-avoid" style={lead ? { columnSpan: "all" } : undefined}>
-      <h3
-        className="font-bold leading-snug"
-        style={{ fontSize: `${headlinePx}px`, fontFamily: '"SolaimanLipi", "Noto Sans Bengali", sans-serif' }}
-      >
+      <h3 className="font-bold leading-snug" style={{ fontSize: `${headlinePx}px`, fontFamily: BN_FONT }}>
         <Link to="/news/$slug" params={{ slug: item.slug }} className="hover:underline">
           {item.title}
         </Link>
       </h3>
-      <Byline item={item} />
+      {item.byline ? <p className="mt-0.5 text-[0.72em] italic opacity-75">{item.byline}</p> : null}
       {item.image ? (
         <figure className="mt-1">
           <img
@@ -93,9 +84,7 @@ function ItemBlock({ item, tpl, zoom, lead }: { item: EpaperItem; tpl: TemplateC
             className="w-full border border-border/40 object-cover"
             style={{ height: `${imageHeight}px` }}
           />
-          {item.caption ? (
-            <figcaption className="mt-0.5 text-[0.68em] opacity-70">{item.caption}</figcaption>
-          ) : null}
+          {item.caption ? <figcaption className="mt-0.5 text-[0.68em] opacity-70">{item.caption}</figcaption> : null}
         </figure>
       ) : null}
       {item.excerpt ? (
@@ -117,21 +106,37 @@ function ItemBlock({ item, tpl, zoom, lead }: { item: EpaperItem; tpl: TemplateC
 
 function AdBlock({ ad, zoom, wide }: { ad: EpaperPageData["ads"][number]; zoom: number; wide: boolean }) {
   const h = (ad.size === "small" ? 70 : ad.size === "medium" ? 110 : 160) * zoom;
+  const floatStyle: CSSProperties | undefined = wide
+    ? undefined
+    : {
+        float: ad.position === "right" ? "right" : "left",
+        width: `${ad.size === "small" ? 30 : ad.size === "medium" ? 42 : 50}%`,
+        margin: "0.35em 0.6em",
+      };
   return (
-    <figure
-      className="break-inside-avoid border border-dashed border-primary/50 bg-muted/30 p-1"
-      style={wide ? undefined : { float: ad.position === "right" ? "right" : "left", width: `${ad.size === "small" ? 30 : ad.size === "medium" ? 42 : 50}%`, margin: "0.35em 0.6em" }}
-    >
+    <figure className="break-inside-avoid border border-dashed border-primary/50 bg-muted/30 p-1" style={floatStyle}>
       <a href={ad.link_url || "#"} target={ad.link_url ? "_blank" : undefined} rel="noopener noreferrer">
         <img src={ad.image_url} alt={ad.title} loading="lazy" className="w-full object-contain" style={{ height: `${h}px` }} />
       </a>
-      <figcaption className="text-center text-[0.6em] opacity-60">বিজ্ঞাপন{ad.organization ? ` · ${ad.organization}` : ""}</figcaption>
+      <figcaption className="text-center text-[0.6em] opacity-60">
+        বিজ্ঞাপন{ad.organization ? ` · ${ad.organization}` : ""}
+      </figcaption>
     </figure>
   );
 }
 
 /** One newspaper page. Used both on screen and inside the print container. */
-function PageCanvas({ page, tpl, issueDate, zoom }: { page: EpaperPageData; tpl: TemplateConfig & { logo_url?: string | null }; issueDate: string; zoom: number }) {
+function PageCanvas({
+  page,
+  tpl,
+  issueDate,
+  zoom,
+}: {
+  page: EpaperPageData;
+  tpl: TemplateConfig & { logo_url?: string | null };
+  issueDate: string;
+  zoom: number;
+}) {
   const cols = tpl.columns[KIND_COLUMN_KEY[page.kind]] ?? 3;
   const margin = tpl.margin * zoom;
   const fullAd = page.ads.find((a) => a.position === "full");
@@ -151,20 +156,17 @@ function PageCanvas({ page, tpl, issueDate, zoom }: { page: EpaperPageData; tpl:
       }}
       data-page={page.number}
     >
-      <header
-        className="mb-2 flex flex-wrap items-end justify-between gap-1 border-b-2 pb-1"
-        style={{ borderColor: tpl.accent }}
-      >
+      <header className="mb-2 flex flex-wrap items-end justify-between gap-1 border-b-2 pb-1" style={{ borderColor: tpl.accent }}>
         <div className="flex items-center gap-2">
           {tpl.logo_url ? (
             <img src={tpl.logo_url} alt="মহাকাল টেলিভিশন" className="h-9 w-auto object-contain sm:h-12" />
           ) : (
-            <span className="text-xl font-black tracking-wide sm:text-2xl" style={{ color: tpl.accent, fontFamily: '"SolaimanLipi", sans-serif' }}>
+            <span className="text-xl font-black tracking-wide sm:text-2xl" style={{ color: tpl.accent, fontFamily: BN_FONT }}>
               দৈনিক মহাকাল
             </span>
           )}
         </div>
-        <div className="text-right text-[0.7em] leading-tight opacity-80" style={{ fontFamily: '"SolaimanLipi", sans-serif' }}>
+        <div className="text-right text-[0.7em] leading-tight opacity-80" style={{ fontFamily: BN_FONT }}>
           <p>{formatBnDate(`${issueDate}T06:00:00Z`, false)}</p>
           <p>
             {page.title} · {toBn(page.number)} পৃষ্ঠা
@@ -201,7 +203,10 @@ function PageCanvas({ page, tpl, issueDate, zoom }: { page: EpaperPageData; tpl:
           ))}
         </>
       )}
-      <footer className="mt-2 border-t pt-1 text-center text-[0.65em] opacity-70" style={{ borderColor: tpl.accent, fontFamily: '"SolaimanLipi", sans-serif' }}>
+      <footer
+        className="mt-2 border-t pt-1 text-center text-[0.65em] opacity-70"
+        style={{ borderColor: tpl.accent, fontFamily: BN_FONT }}
+      >
         মহাকাল টেলিভিশন · mohakaltelevision.lovable.app
       </footer>
     </div>
@@ -211,6 +216,7 @@ function PageCanvas({ page, tpl, issueDate, zoom }: { page: EpaperPageData; tpl:
 function EpaperPage() {
   const { date: param } = Route.useSearch();
   const date = param ?? todayDhaka();
+  const navigate = useNavigate();
   const [fontReady, setFontReady] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [zoom, setZoom] = useState(1);
@@ -224,22 +230,17 @@ function EpaperPage() {
 
   useEffect(() => setPageIndex(0), [date]);
 
-  const issueQ = useQuery({
-    queryKey: ["epaper-issue", date],
-    queryFn: () => fetchIssue(date),
-  });
-  const archiveQ = useQuery({
-    queryKey: ["epaper-archive"],
-    queryFn: () => fetchRecentIssues(),
-    staleTime: 5 * 60 * 1000,
-  });
+  const issueQ = useQuery({ queryKey: ["epaper-issue", date], queryFn: () => fetchIssue(date) });
+  const archiveQ = useQuery({ queryKey: ["epaper-archive"], queryFn: () => fetchRecentIssues(), staleTime: 5 * 60 * 1000 });
 
   const issue = issueQ.data ?? null;
   const tpl = useMemo(() => safeTemplate(issue?.template), [issue?.template]);
   const pages = issue?.pages ?? [];
   const page = pages[Math.min(pageIndex, Math.max(pages.length - 1, 0))] ?? null;
 
-  const bnDate = formatBnDate(`${date}T06:00:00Z`, false);
+  const navigateDate = (d: string) =>
+    void navigate({ to: "/epaper", search: { date: d === todayDhaka() ? undefined : d } });
+
   const Paper = PAPER_SIZES[paper];
 
   return (
@@ -249,7 +250,7 @@ function EpaperPage() {
       <div className="no-print mx-auto max-w-5xl px-3 py-4">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="mr-auto text-xl font-black sm:text-2xl">ই-পেপার</h1>
-          <Button variant="outline" size="sm" asChild={false} onClick={() => setZoom((z) => Math.max(0.8, z - 0.2))} aria-label="ছোট করুন">
+          <Button variant="outline" size="sm" onClick={() => setZoom((z) => Math.max(0.8, z - 0.2))} aria-label="ছোট করুন">
             <ZoomOut /> ছোট
           </Button>
           <Button variant="outline" size="sm" onClick={() => setZoom((z) => Math.min(1.6, z + 0.2))} aria-label="বড় করুন">
@@ -270,7 +271,7 @@ function EpaperPage() {
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-2">
-          <Button variant="outline" size="sm" onClick={() => void navigateDate(addDaysLocal(date, -1))} aria-label="আগের দিন">
+          <Button variant="outline" size="sm" onClick={() => navigateDate(addDaysLocal(date, -1))} aria-label="আগের দিন">
             <ChevronLeft /> আগের দিন
           </Button>
           <Input
@@ -281,12 +282,12 @@ function EpaperPage() {
             onChange={(e) => e.target.value && navigateDate(e.target.value)}
             aria-label="তারিখ"
           />
-          <Button variant="outline" size="sm" onClick={() => void navigateDate(addDaysLocal(date, 1))} aria-label="পরের দিন">
+          <Button variant="outline" size="sm" onClick={() => navigateDate(addDaysLocal(date, 1))} aria-label="পরের দিন">
             পরের দিন <ChevronRight />
           </Button>
           <p className="text-sm text-muted-foreground">
             <CalendarDays className="mr-1 inline h-4 w-4" />
-            {bnDate}
+            {formatBnDate(`${date}T06:00:00Z`, false)}
             {issue ? ` · ${toBn(issue.news_count)} সংবাদ · ${toBn(issue.page_count)} পৃষ্ঠা` : ""}
           </p>
         </div>
@@ -344,7 +345,7 @@ function EpaperPage() {
                     onClick={() => setPageIndex(i)}
                     aria-label={`${toBn(p.number)} পৃষ্ঠা`}
                   >
-                    <div className="pointer-events-none bg-white" style={{ zoom: 0.22 } as React.CSSProperties}>
+                    <div className="pointer-events-none bg-white" style={{ zoom: 0.22 } as CSSProperties}>
                       <PageCanvas page={p} tpl={tpl} issueDate={date} zoom={1} />
                     </div>
                   </button>
@@ -352,11 +353,11 @@ function EpaperPage() {
               </div>
             </div>
 
-            {/* print / PDF view: every page, exact paper size, max 4 pages */}
+            {/* print / PDF view: every page, exact paper size, hard cap of 4 pages */}
             <div className="hidden print:block">
               {pages.slice(0, MAX_PAGES).map((p) => (
                 <div key={p.number} style={{ breakAfter: "page", width: `${Paper.width}mm` }}>
-                  <div style={{ zoom: (Paper.width * 3.7795) / LOGICAL_WIDTH } as React.CSSProperties}>
+                  <div style={{ zoom: (Paper.width * MM_PER_PX) / LOGICAL_WIDTH } as CSSProperties}>
                     <PageCanvas page={p} tpl={tpl} issueDate={date} zoom={1} />
                   </div>
                 </div>
@@ -367,13 +368,4 @@ function EpaperPage() {
       </div>
     </PublicLayout>
   );
-
-  function navigateDate(d: string) {
-    void Route.useNavigate()({ to: "/epaper", search: { date: d === todayDhaka() ? undefined : d } });
-  }
-}
-
-/** Small hook wrapper kept outside render flow for the date navigation above. */
-function useNavigateEpaper() {
-  return Route.useNavigate();
 }
