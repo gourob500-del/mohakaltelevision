@@ -4,6 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Bundled Bengali font — e-paper and print must not depend on visitor-installed fonts. */
+@font-face {
+  font-family: "SolaimanLipi";
+  src: url("/fonts/solaiman-lipi.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
  * MOHAKAL TELEVISION design system.
  * Palette: Red + Black + White. Bengali-first typography (Noto Sans Bengali).
@@ -256,4 +265,6 @@
   body { background: #fff; color: #000; }
   article { max-width: 100% !important; }
   img { max-width: 100%; page-break-inside: avoid; }
+  .epaper-page { box-shadow: none !important; border: none !important; }
+  .epaper-columns { orphans: 2; widows: 2; }
 }

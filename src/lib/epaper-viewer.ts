@@ -35,7 +35,9 @@ export function toBn(value: number | string): string {
 }
 
 /** Lists recent published issues for the archive. */
-export async function fetchRecentIssues(limit = 45): Promise<Pick<EpaperIssueRow, "issue_date" | "page_count" | "news_count">[]> {
+export async function fetchRecentIssues(
+  limit = 45,
+): Promise<Pick<EpaperIssueRow, "issue_date" | "page_count" | "news_count">[]> {
   const { data, error } = await supabase
     .from("epaper_issues")
     .select("issue_date, page_count, news_count")
@@ -75,13 +77,6 @@ export const PAPER_SIZES = {
 } as const;
 
 export type PaperSize = keyof typeof PAPER_SIZES;
-
-const AD_SIZES_MM: Record<string, number> = { small: 42, medium: 62, large: 92 };
-
-/** Height (mm) of one e-paper ad block on the printed page. */
-export function adHeightMm(size: string): number {
-  return AD_SIZES_MM[size] ?? AD_SIZES_MM.small;
-}
 
 /** Zoom multipliers offered in the viewer. */
 export const ZOOM_LEVELS = [0.8, 1, 1.25, 1.5] as const;
