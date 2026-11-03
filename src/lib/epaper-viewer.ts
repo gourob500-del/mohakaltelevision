@@ -31,7 +31,7 @@ export function ensureEpaperFont(): Promise<void> {
 const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
 
 export function toBn(value: number | string): string {
-  return String(value).replace(/\d/g, (d) => BN_DIGITS[Number(d)]);
+  return String(value).replace(/\d/g, (d) => BN_DIGITS[Number(d)] ?? d);
 }
 
 /** Lists recent published issues for the archive. */

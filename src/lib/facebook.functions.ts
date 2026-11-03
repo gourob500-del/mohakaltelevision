@@ -56,7 +56,7 @@ async function postNewsToPage(newsId: string): Promise<PostOutcome> {
   }
 
   const { data: site } = await supabaseAdmin.from("website_settings").select("site_name, website_url").eq("id", 1).maybeSingle();
-  const caption = buildFacebookCaption(news, { site_name: site?.site_name, website_url: site?.website_url });
+  const caption = buildFacebookCaption(news, { site_name: site?.site_name ?? null, website_url: site?.website_url ?? null });
 
   // Featured images may be stored as absolute URLs or site-relative paths.
   let imageUrl = news.featured_image;
