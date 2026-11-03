@@ -376,6 +376,68 @@ export type Database = {
         }
         Relationships: []
       }
+      facebook_posts: {
+        Row: {
+          created_at: string
+          error: string | null
+          fb_comment_id: string | null
+          fb_post_id: string | null
+          id: string
+          news_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          fb_comment_id?: string | null
+          fb_post_id?: string | null
+          id?: string
+          news_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          fb_comment_id?: string | null
+          fb_post_id?: string | null
+          id?: string
+          news_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "facebook_posts_news_id_fkey"
+            columns: ["news_id"]
+            isOneToOne: false
+            referencedRelation: "news"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      facebook_settings: {
+        Row: {
+          access_token: string
+          auto_enabled: boolean
+          id: number
+          page_id: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          auto_enabled?: boolean
+          id?: number
+          page_id?: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          auto_enabled?: boolean
+          id?: number
+          page_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       media: {
         Row: {
           created_at: string
