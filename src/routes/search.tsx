@@ -44,7 +44,7 @@ function SearchPage() {
 
   return (
     <PublicLayout>
-      <SectionTitle>অনুসন্ধান{term ? `: ${term}` : ""}</SectionTitle>
+      <SectionTitle as="h1">অনুসন্ধান{term ? `: ${term}` : ""}</SectionTitle>
       {term.length < 2 ? (
         <p className="py-16 text-center text-muted-foreground">
           অনুসন্ধানের জন্য কমপক্ষে ২ অক্ষর লিখুন।

@@ -24,7 +24,7 @@ function LatestPage() {
 
   return (
     <PublicLayout>
-      <SectionTitle>সর্বশেষ সংবাদ</SectionTitle>
+      <SectionTitle as="h1">সর্বশেষ সংবাদ</SectionTitle>
       {isLoading ? (
         <p className="py-16 text-center text-muted-foreground">লোড হচ্ছে...</p>
       ) : !data?.length ? (
