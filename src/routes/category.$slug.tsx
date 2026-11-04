@@ -6,6 +6,39 @@ import { NewsCard } from "@/components/NewsCard";
 import { NEWS_SELECT, type NewsRow } from "@/lib/queries";
 
 export const Route = createFileRoute("/category/$slug")({
+  staticData: { sitemap: true },
+  loader: async ({ params }) => {
+    try {
+      const { data } = await supabase
+        .from("categories")
+        .select("name, slug")
+        .eq("slug", params.slug)
+        .maybeSingle();
+      return { category: data ?? null };
+    } catch {
+      return { category: null };
+    }
+  },
+  head: ({ params, loaderData }) => {
+    const cat = loaderData?.category;
+    const title = cat ? `${cat.name} — মহাকাল টেলিভিশন` : "বিভাগ — মহাকাল টেলিভিশন";
+    const description = cat
+      ? `মহাকাল টেলিভিশনের ${cat.name} বিভাগের সর্বশেষ সংবাদ পড়ুন।`
+      : "মহাকাল টেলিভিশনের বিভাগভিত্তিক সংবাদ।";
+    const url = `https://mohakaltelevision.lovable.app/category/${params.slug}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        ...(cat ? [] : [{ name: "robots", content: "noindex" }]),
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: CategoryPage,
 });
 
@@ -42,7 +75,7 @@ function CategoryPage() {
 
   return (
     <PublicLayout>
-      <SectionTitle>{category?.name ?? "বিভাগ"}</SectionTitle>
+      <SectionTitle as="h1">{category?.name ?? "বিভাগ"}</SectionTitle>
       {isLoading ? (
         <p className="py-16 text-center text-muted-foreground">লোড হচ্ছে...</p>
       ) : !data?.length ? (

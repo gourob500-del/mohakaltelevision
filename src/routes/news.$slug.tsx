@@ -15,14 +15,12 @@ import { formatBnDate, toBn } from "@/lib/mtv";
 export const Route = createFileRoute("/news/$slug")({
   staticData: { sitemap: true },
   loader: async ({ params }) => ({ news: await fetchNewsBySlug(params.slug) }),
-  head: ({ loaderData }) => {
+  head: ({ params, loaderData }) => {
     const n = loaderData?.news;
     const title = n ? `${n.title} — মহাকাল টেলিভিশন` : "সংবাদ — মহাকাল টেলিভিশন";
     const description = (n?.summary || n?.title || "মহাকাল টেলিভিশনের সর্বশেষ সংবাদ।").slice(0, 155);
     const image = n?.featured_image?.startsWith("https://") ? n.featured_image : null;
-    const url = n?.slug
-      ? `https://mohakaltelevision.lovable.app/news/${n.slug}`
-      : `https://mohakaltelevision.lovable.app/news/${loaderData?.news ? "" : ""}`.replace(/\/$/, "/");
+    const url = `https://mohakaltelevision.lovable.app/news/${params.slug}`;
     const jsonLd = n
       ? {
           "@context": "https://schema.org",
