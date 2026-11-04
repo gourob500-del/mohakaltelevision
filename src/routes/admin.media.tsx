@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { deleteMedia, fetchMedia } from "@/lib/admin";
 import { formatBnDate, toBn } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/media")({
+export const Route = createFileRoute("/admin/media")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "মিডিয়া লাইব্রেরি — MOHAKAL TELEVISION" },

@@ -12,7 +12,7 @@ import { deleteNews, fetchNewsById, setNewsStatus, updateNews } from "@/lib/admi
 import { fetchCategories, fetchDistricts, fetchDivisions, fetchUpazilas } from "@/lib/queries";
 import { STATUS_BN, STATUS_CLASS, formatBnDate, toBn, type NewsStatus } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/news/$id")({
+export const Route = createFileRoute("/admin/news/$id")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "সংবাদ পর্যালোচনা — MOHAKAL TELEVISION" },

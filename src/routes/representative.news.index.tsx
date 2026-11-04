@@ -10,7 +10,7 @@ import { REP_NAV } from "@/lib/rep-nav";
 import { fetchMyNews } from "@/lib/news";
 import { STATUS_BN, STATUS_CLASS, formatBnDate, toBn, type NewsStatus } from "@/lib/mtv";
 
-export const Route = createFileRoute("/representative/news/")({
+export const Route = createFileRoute("/representative/news/")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "আমার সংবাদ — MOHAKAL TELEVISION" },

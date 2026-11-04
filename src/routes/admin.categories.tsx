@@ -14,7 +14,7 @@ import {
 } from "@/lib/admin";
 import { toBn } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/categories")({
+export const Route = createFileRoute("/admin/categories")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "বিভাগ ব্যবস্থাপনা — MOHAKAL TELEVISION" },

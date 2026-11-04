@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { deleteComment, deleteReport, fetchAllComments, fetchAllReports, setCommentApproval, setReportResolved } from "@/lib/moderation";
 import { formatBnDate } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/moderation")({ head: () => ({ meta: [{ title: "মন্তব্য ও রিপোর্ট — MOHAKAL TELEVISION" }, { name: "description", content: "সংবাদের মন্তব্য ও রিপোর্ট পর্যালোচনা।" }, { property: "og:title", content: "মন্তব্য ও রিপোর্ট" }, { property: "og:description", content: "সংবাদের মন্তব্য ও রিপোর্ট পর্যালোচনা।" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: ModerationPage });
+export const Route = createFileRoute("/admin/moderation")({ staticData: { sitemap: false }, head: () => ({ meta: [{ title: "মন্তব্য ও রিপোর্ট — MOHAKAL TELEVISION" }, { name: "description", content: "সংবাদের মন্তব্য ও রিপোর্ট পর্যালোচনা।" }, { property: "og:title", content: "মন্তব্য ও রিপোর্ট" }, { property: "og:description", content: "সংবাদের মন্তব্য ও রিপোর্ট পর্যালোচনা।" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: ModerationPage });
 
 function ModerationPage() {
   const enabled = useAdminReady(); const qc = useQueryClient();

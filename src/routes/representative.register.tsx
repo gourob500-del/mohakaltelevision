@@ -10,7 +10,7 @@ import { PublicLayout } from "@/components/PublicLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchDistricts, fetchUpazilas } from "@/lib/queries";
 
-export const Route = createFileRoute("/representative/register")({
+export const Route = createFileRoute("/representative/register")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "প্রতিনিধি নিবন্ধন — MOHAKAL TELEVISION" },

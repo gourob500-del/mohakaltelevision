@@ -15,7 +15,7 @@ import {
 } from "@/lib/admin";
 import { fetchDistricts, fetchDivisions, fetchUpazilas } from "@/lib/queries";
 
-export const Route = createFileRoute("/admin/locations")({
+export const Route = createFileRoute("/admin/locations")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "জেলা ও উপজেলা ব্যবস্থাপনা — MOHAKAL TELEVISION" },

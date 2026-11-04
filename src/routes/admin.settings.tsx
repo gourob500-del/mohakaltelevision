@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { fetchAdminSettings, updateSettings } from "@/lib/admin";
 import { clearWatermarkCache, WATERMARK_POSITIONS } from "@/lib/watermark";
 
-export const Route = createFileRoute("/admin/settings")({
+export const Route = createFileRoute("/admin/settings")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "ওয়েবসাইট সেটিংস — MOHAKAL TELEVISION" },

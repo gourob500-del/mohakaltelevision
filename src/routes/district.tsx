@@ -8,7 +8,7 @@ import { NEWS_SELECT, fetchDistricts, type NewsRow } from "@/lib/queries";
 
 const schema = z.object({ d: z.string().uuid().optional() });
 
-export const Route = createFileRoute("/district")({
+export const Route = createFileRoute("/district")({ staticData: { sitemap: true },
   validateSearch: schema,
   head: () => ({
     meta: [

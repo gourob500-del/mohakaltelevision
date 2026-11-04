@@ -8,7 +8,7 @@ import { NEWS_SELECT, type NewsRow } from "@/lib/queries";
 
 const searchSchema = z.object({ q: z.string().trim().max(100).optional() });
 
-export const Route = createFileRoute("/search")({
+export const Route = createFileRoute("/search")({ staticData: { sitemap: true },
   validateSearch: searchSchema,
   head: () => ({
     meta: [

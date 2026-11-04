@@ -13,7 +13,7 @@ import { createRepresentative } from "@/lib/admin.functions";
 import { fetchDistricts, fetchUpazilas } from "@/lib/queries";
 import { ACCOUNT_STATUS_BN, ROLE_BN, formatBnDate } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/representatives")({
+export const Route = createFileRoute("/admin/representatives")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "প্রতিনিধি ব্যবস্থাপনা — MOHAKAL TELEVISION" },

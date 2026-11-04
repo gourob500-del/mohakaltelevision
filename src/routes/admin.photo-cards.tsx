@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchSettings } from "@/lib/queries";
 import { PHOTO_CARD_FIELDS, renderPhotoCard, type PhotoCardNews, type PhotoCardTemplate, type TemplateElement } from "@/lib/photo-card";
 
-export const Route = createFileRoute("/admin/photo-cards")({
+export const Route = createFileRoute("/admin/photo-cards")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "ফটোকার্ড টেমপ্লেট — MOHAKAL TELEVISION" },

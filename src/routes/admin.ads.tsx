@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AD_PLACEMENTS, deleteAd, fetchAllAds, saveAd, type Ad } from "@/lib/ads";
 
-export const Route = createFileRoute("/admin/ads")({
+export const Route = createFileRoute("/admin/ads")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "বিজ্ঞাপন ব্যবস্থাপনা — MOHAKAL TELEVISION" },

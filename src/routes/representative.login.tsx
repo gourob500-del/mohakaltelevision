@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { loadAccount, useAuth } from "@/hooks/useAuth";
 import { logActivity } from "@/lib/queries";
 
-export const Route = createFileRoute("/representative/login")({
+export const Route = createFileRoute("/representative/login")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "প্রতিনিধি লগইন — MOHAKAL TELEVISION" },

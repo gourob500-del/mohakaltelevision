@@ -5,7 +5,7 @@ import { StatCard } from "@/components/DashboardShell";
 import { fetchAdminNews, fetchAdminStats } from "@/lib/admin";
 import { STATUS_BN, STATUS_CLASS, formatBnDate, toBn, type NewsStatus } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute("/admin/")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "অ্যাডমিন ড্যাশবোর্ড — MOHAKAL TELEVISION" },

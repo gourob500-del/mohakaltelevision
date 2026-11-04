@@ -13,7 +13,7 @@ import { createAdminUser } from "@/lib/admin-users.functions";
 import { fetchAdminAccounts, setUserRole } from "@/lib/admin-users";
 import { PERMISSION_MODULES, setPermissions } from "@/lib/permissions";
 
-export const Route = createFileRoute("/admin/users")({
+export const Route = createFileRoute("/admin/users")({ staticData: { sitemap: false },
   head: () => ({ meta: [{ title: "অ্যাডমিন ও অনুমতি — MOHAKAL TELEVISION" }, { name: "description", content: "অ্যাডমিন অ্যাকাউন্ট ও অনুমতি ব্যবস্থাপনা।" }, { property: "og:title", content: "অ্যাডমিন ও অনুমতি" }, { property: "og:description", content: "অ্যাডমিন অ্যাকাউন্ট ও অনুমতি ব্যবস্থাপনা।" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: AdminUsers,
 });
