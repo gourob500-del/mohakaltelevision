@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Menu, Search, Shield, UserRound, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { NAV_LINKS } from "@/lib/mtv";
@@ -13,6 +13,8 @@ export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [term, setTerm] = useState("");
   const navigate = useNavigate();
+  const pathname = useLocation().pathname;
+  const isHome = pathname === "/";
   const { data: settings } = useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
 
   const submit = (e: React.FormEvent) => {
@@ -31,14 +33,25 @@ export function SiteHeader() {
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded bg-primary text-sm font-black text-primary-foreground">
               MTV
             </span>
-            <span className="min-w-0">
-              <span className="block truncate text-lg font-black leading-tight tracking-tight sm:text-xl">
-                {settings?.site_name ?? "MOHAKAL TELEVISION"}
+            {isHome ? (
+              <h1 className="min-w-0">
+                <span className="block truncate text-lg font-black leading-tight tracking-tight sm:text-xl">
+                  {settings?.site_name ?? "MOHAKAL TELEVISION"}
+                </span>
+                <span className="block truncate text-[11px] font-medium text-ink-foreground/70">
+                  {settings?.tagline ?? "আপনার আয়োজন, আমাদের সংবাদ"}
+                </span>
+              </h1>
+            ) : (
+              <span className="min-w-0">
+                <span className="block truncate text-lg font-black leading-tight tracking-tight sm:text-xl">
+                  {settings?.site_name ?? "MOHAKAL TELEVISION"}
+                </span>
+                <span className="block truncate text-[11px] text-ink-foreground/70">
+                  {settings?.tagline ?? "আপনার আয়োজন, আমাদের সংবাদ"}
+                </span>
               </span>
-              <span className="block truncate text-[11px] text-ink-foreground/70">
-                {settings?.tagline ?? "আপনার আয়োজন, আমাদের সংবাদ"}
-              </span>
-            </span>
+            )}
           </Link>
 
           <div className="flex items-center gap-1">

@@ -7,6 +7,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { fetchHomeFeed, type NewsRow } from "@/lib/queries";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "MOHAKAL TELEVISION — আপনার আয়োজন, আমাদের সংবাদ" },
@@ -19,6 +20,25 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content: "বাংলাদেশের সর্বশেষ জাতীয়, আন্তর্জাতিক ও জেলার সংবাদ এক ঠিকানায়।",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://mohakaltelevision.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://mohakaltelevision.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "MOHAKAL TELEVISION",
+          url: "https://mohakaltelevision.lovable.app/",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://mohakaltelevision.lovable.app/search?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
       },
     ],
   }),

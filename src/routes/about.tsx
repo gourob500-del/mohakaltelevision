@@ -26,7 +26,7 @@ function AboutPage() {
 
   return (
     <PublicLayout>
-      <SectionTitle>আমাদের সম্পর্কে</SectionTitle>
+      <SectionTitle as="h1">আমাদের সম্পর্কে</SectionTitle>
       <div className="news-body max-w-3xl">
         {data?.about_text ? (
           data.about_text

@@ -30,7 +30,7 @@ function ContactPage() {
 
   return (
     <PublicLayout>
-      <SectionTitle>যোগাযোগ</SectionTitle>
+      <SectionTitle as="h1">যোগাযোগ</SectionTitle>
       <div className="grid max-w-3xl gap-3 sm:grid-cols-3">
         {items.map((item) => (
           <div key={item.label} className="rounded-lg border border-border bg-card p-4 shadow-card">

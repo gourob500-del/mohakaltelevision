@@ -12,12 +12,21 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   );
 }
 
-export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
+export function SectionTitle({
+  children,
+  action,
+  as = "h2",
+}: {
+  children: ReactNode;
+  action?: ReactNode;
+  as?: "h1" | "h2";
+}) {
+  const Tag = as;
   return (
-    <div className="section-title">
+    <Tag className="section-title">
       <span className="section-title-bar" />
       <span>{children}</span>
       {action ? <span className="ml-auto text-sm font-normal">{action}</span> : null}
-    </div>
+    </Tag>
   );
 }
