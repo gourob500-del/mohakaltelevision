@@ -16,6 +16,7 @@ import { Route as DistrictRouteImport } from './routes/district'
 import { Route as EpaperRouteImport } from './routes/epaper'
 import { Route as LatestRouteImport } from './routes/latest'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAdsRouteImport } from './routes/admin.ads'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
@@ -74,6 +75,11 @@ const LatestRoute = LatestRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -238,6 +245,7 @@ export interface FileRoutesByTo {
   '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -272,6 +280,7 @@ export interface FileRoutesById {
   '/epaper': typeof EpaperRoute
   '/latest': typeof LatestRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/ads': typeof AdminAdsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/locations': typeof AdminLocationsRoute
@@ -307,6 +316,7 @@ export interface FileRouteTypes {
     | '/epaper'
     | '/latest'
     | '/search'
+    | '/sitemap.xml'
     | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
@@ -340,6 +350,7 @@ export interface FileRouteTypes {
     | '/epaper'
     | '/latest'
     | '/search'
+    | '/sitemap.xml'
     | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
@@ -373,6 +384,7 @@ export interface FileRouteTypes {
     | '/epaper'
     | '/latest'
     | '/search'
+    | '/sitemap.xml'
     | '/admin/ads'
     | '/admin/categories'
     | '/admin/locations'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   EpaperRoute: typeof EpaperRoute
   LatestRoute: typeof LatestRoute
   SearchRoute: typeof SearchRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAdsRoute: typeof AdminAdsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminLocationsRoute: typeof AdminLocationsRoute
@@ -482,6 +495,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -663,6 +683,7 @@ const rootRouteChildren: RootRouteChildren = {
   EpaperRoute: EpaperRoute,
   LatestRoute: LatestRoute,
   SearchRoute: SearchRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAdsRoute: AdminAdsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminLocationsRoute: AdminLocationsRoute,
