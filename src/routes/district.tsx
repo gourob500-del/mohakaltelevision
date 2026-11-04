@@ -49,6 +49,7 @@ function DistrictPage() {
   return (
     <PublicLayout>
       <SectionTitle
+        as="h1"
         action={
           <select
             className="rounded border border-border bg-background px-2 py-1 text-sm"
