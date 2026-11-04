@@ -13,12 +13,34 @@ import { NEWS_SELECT, fetchAdjacentNews, fetchNewsBySlug, type NewsRow } from "@
 import { formatBnDate, toBn } from "@/lib/mtv";
 
 export const Route = createFileRoute("/news/$slug")({
+  staticData: { sitemap: true },
   loader: async ({ params }) => ({ news: await fetchNewsBySlug(params.slug) }),
   head: ({ loaderData }) => {
     const n = loaderData?.news;
     const title = n ? `${n.title} — মহাকাল টেলিভিশন` : "সংবাদ — মহাকাল টেলিভিশন";
     const description = (n?.summary || n?.title || "মহাকাল টেলিভিশনের সর্বশেষ সংবাদ।").slice(0, 155);
     const image = n?.featured_image?.startsWith("https://") ? n.featured_image : null;
+    const url = n?.slug
+      ? `https://mohakaltelevision.lovable.app/news/${n.slug}`
+      : `https://mohakaltelevision.lovable.app/news/${loaderData?.news ? "" : ""}`.replace(/\/$/, "/");
+    const jsonLd = n
+      ? {
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          headline: n.title,
+          description,
+          ...(image ? { image: [image] } : {}),
+          ...(n.published_at ? { datePublished: n.published_at } : {}),
+          ...(n.updated_at || n.published_at ? { dateModified: n.updated_at || n.published_at } : {}),
+          author: { "@type": "Person", name: n.reporter_name || "MOHAKAL TELEVISION" },
+          publisher: {
+            "@type": "Organization",
+            name: "MOHAKAL TELEVISION",
+            url: "https://mohakaltelevision.lovable.app",
+          },
+          mainEntityOfPage: url,
+        }
+      : null;
     return {
       meta: [
         { title },
@@ -26,6 +48,7 @@ export const Route = createFileRoute("/news/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
         ...(image
           ? [
@@ -35,6 +58,10 @@ export const Route = createFileRoute("/news/$slug")({
           : []),
         ...(n ? [] : [{ name: "robots", content: "noindex" }]),
       ],
+      links: [{ rel: "canonical", href: url }],
+      ...(jsonLd
+        ? { scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }] }
+        : {}),
     };
   },
   errorComponent: () => (
