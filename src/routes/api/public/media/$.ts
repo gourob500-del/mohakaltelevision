@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 // Serves images from the private media bucket. Read-only, no PII.
-export const Route = createFileRoute("/api/public/media/$")({
+export const Route = createFileRoute("/api/public/media/$")({ staticData: { sitemap: false },
   server: {
     handlers: {
       GET: async ({ params }) => {

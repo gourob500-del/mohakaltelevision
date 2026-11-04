@@ -21,7 +21,7 @@ import { formatBnDate } from "@/lib/mtv";
 const LOGICAL_WIDTH = 820; // px a page is laid out at on screen
 const MM_PER_PX = 3.7795; // CSS mm unit
 
-export const Route = createFileRoute("/epaper")({
+export const Route = createFileRoute("/epaper")({ staticData: { sitemap: true },
   validateSearch: (s: Record<string, unknown>) => ({
     date: typeof s["date"] === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s["date"]) ? (s["date"] as string) : undefined,
   }),

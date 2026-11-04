@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createHash, timingSafeEqual } from "node:crypto";
 
 /** Daily automation entry point. Called by pg_cron at 00:10 Asia/Dhaka. */
-export const Route = createFileRoute("/api/public/epaper-generate")({
+export const Route = createFileRoute("/api/public/epaper-generate")({ staticData: { sitemap: false },
   server: {
     handlers: {
       POST: async ({ request }) => {

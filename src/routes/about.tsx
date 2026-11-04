@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { fetchSettings } from "@/lib/queries";
 
-export const Route = createFileRoute("/about")({
+export const Route = createFileRoute("/about")({ staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "আমাদের সম্পর্কে — MOHAKAL TELEVISION" },

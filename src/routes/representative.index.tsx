@@ -9,7 +9,7 @@ import { REP_NAV } from "@/lib/rep-nav";
 import { DashboardShell, StatCard } from "@/components/DashboardShell";
 import { STATUS_BN, STATUS_CLASS, formatBnDate, toBn, type NewsStatus } from "@/lib/mtv";
 
-export const Route = createFileRoute("/representative/")({
+export const Route = createFileRoute("/representative/")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "প্রতিনিধি ড্যাশবোর্ড — MOHAKAL TELEVISION" },

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ACTION_BN, fetchActivityLogs } from "@/lib/admin";
 import { formatBnDate } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/logs")({ head: () => ({ meta: [{ title: "অ্যাক্টিভিটি লগ — MOHAKAL TELEVISION" }, { name: "description", content: "অ্যাডমিন ও প্রতিনিধিদের গুরুত্বপূর্ণ কার্যক্রম।" }, { property: "og:title", content: "অ্যাক্টিভিটি লগ" }, { property: "og:description", content: "সিস্টেম কার্যক্রমের তালিকা।" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: LogsPage });
+export const Route = createFileRoute("/admin/logs")({ staticData: { sitemap: false }, head: () => ({ meta: [{ title: "অ্যাক্টিভিটি লগ — MOHAKAL TELEVISION" }, { name: "description", content: "অ্যাডমিন ও প্রতিনিধিদের গুরুত্বপূর্ণ কার্যক্রম।" }, { property: "og:title", content: "অ্যাক্টিভিটি লগ" }, { property: "og:description", content: "সিস্টেম কার্যক্রমের তালিকা।" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: LogsPage });
 
 function LogsPage() {
   const enabled = useAdminReady();

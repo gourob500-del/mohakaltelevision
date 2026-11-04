@@ -8,7 +8,7 @@ import { saveNews } from "@/lib/news";
 import type { NewsFormValues } from "@/lib/news";
 import type { NewsStatus } from "@/lib/mtv";
 
-export const Route = createFileRoute("/admin/news/new")({
+export const Route = createFileRoute("/admin/news/new")({ staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "নতুন সংবাদ যোগ করুন — MOHAKAL TELEVISION" },

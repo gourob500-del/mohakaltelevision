@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { fetchSettings } from "@/lib/queries";
 
-export const Route = createFileRoute("/contact")({
+export const Route = createFileRoute("/contact")({ staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "যোগাযোগ — MOHAKAL TELEVISION" },

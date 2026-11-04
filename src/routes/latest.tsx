@@ -4,7 +4,7 @@ import { PublicLayout, SectionTitle } from "@/components/PublicLayout";
 import { NewsCard } from "@/components/NewsCard";
 import { fetchLatestNews } from "@/lib/queries";
 
-export const Route = createFileRoute("/latest")({
+export const Route = createFileRoute("/latest")({ staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "সর্বশেষ সংবাদ — MOHAKAL TELEVISION" },
